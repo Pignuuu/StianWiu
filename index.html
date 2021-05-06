@@ -40,6 +40,10 @@
             <code class="js">
                 <script src="prism.js"></script>
                 <pre style="border-radius: 25px;"><code class="language-js">
+    // Command to announce you are live streaming. "/live {ChannelName}".
+    // Custom embed with link and name of streamer will be sent to specified channel.
+    // Command message will also be deleted, mostly there for show off, feel free to remove countdown.
+
     // Get all required variables
     const Discord = require("discord.js");
     const util = require('util');
@@ -109,6 +113,9 @@
             <code class="js">
                 <script src="prism.js"></script>
                 <pre style="border-radius: 25px;"><code class="language-js">
+    // One main discord bot controls 3 or more other bots.
+    // Nice for sending announcements for services like twitch & youtube etc...
+
     const Discord = require("discord.js");
     const util = require('util');
     const sleep = util.promisify(setTimeout);
