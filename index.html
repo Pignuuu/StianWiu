@@ -46,6 +46,96 @@
             <span class="toggle-projects-button" style="cursor: pointer;" onclick="toggleProjects2(), toggleProjects()">Main page</span>
         </h3>
         <h3 class="center">
+            <a href="https://gist.github.com/Pignuuu/28473b30c9c2dd2deb0bbdf7c2723e38">Reaction Roles.js</a>
+        </h3>
+        <pre class="box">
+            <code class="js">
+                <script src="prism.js"></script>
+                <pre style="border-radius: 25px;"><code class="language-js">
+    // Event for giving respective role to user when reacting to respective reaction.
+    // Role is also removed when removing their reaction
+
+
+    // Get all required variables
+    const Discord = require("discord.js");
+
+    const CLIENT_KEY = "TOKEN";
+
+    const client = new Discord.Client();
+
+    const reactionChannel = "CHANNEL ID"
+
+    const javascriptEmoji = "EMOJI ID"
+    const pythonEmoji = "EMOJI ID"
+
+    const javascriptRole = "ROLE ID"
+    const pythonRole = "ROLE ID"
+
+    const guildId = "SERVER ID"
+    const channelId = "CHANNEL ID"
+    const messageId = "MESSAGE ID"
+
+    // Start bot(s)
+
+    async function startbots() {
+        console.log('\x1b[33m%s\x1b[0m', "Starting Client...");
+        client.login(CLIENT_KEY);
+    }
+    startbots();
+
+    // Find message inorder to cache it so bot can see reactions added
+
+    client.on("ready", async() => {
+        const guild = await client.guilds.fetch(guildId);
+        const channel = guild.channels.cache.get(channelId);
+        const message = await channel.messages.fetch(messageId);
+    });
+
+    // Add role when reaction is added
+
+    client.on('messageReactionAdd', async(reaction, user) => {
+        if (reaction.message.channel.id === reactionChannel) {
+            const guild = await client.guilds.fetch(guildId);
+            const channel = guild.channels.cache.get(channelId);
+            const message = await channel.messages.fetch(messageId);
+
+            if (reaction.emoji.id === javascriptEmoji) {
+                const role = guild.roles.cache.find(role => role.id === javascriptRole);
+                const member = guild.members.cache.find(member => member.id === user.id);
+                member.roles.add(role);
+            }
+            if (reaction.emoji.id === pythonEmoji) {
+                const role = guild.roles.cache.find(role => role.id === pythonRole);
+                const member = guild.members.cache.find(member => member.id === user.id);
+                member.roles.add(role);
+            }
+        }
+    });
+
+    // Remove role when reaction is removed
+
+    client.on('messageReactionRemove', async(reaction, user) => {
+        if (reaction.message.channel.id === reactionChannel) {
+            const guild = await client.guilds.fetch(guildId);
+            const channel = guild.channels.cache.get(channelId);
+            const message = await channel.messages.fetch(messageId);
+
+            if (reaction.emoji.id === javascriptEmoji) {
+                const role = guild.roles.cache.find(role => role.id === javascriptRole);
+                const member = guild.members.cache.find(member => member.id === user.id);
+                member.roles.remove(role);
+            }
+            if (reaction.emoji.id === pythonEmoji) {
+                const role = guild.roles.cache.find(role => role.id === pythonRole);
+                const member = guild.members.cache.find(member => member.id === user.id);
+                member.roles.remove(role);
+            }
+        }
+    });
+                    </code></pre>
+        </code>
+        </pre>
+        <h3 class="center">
             <a href="https://gist.github.com/Pignuuu/a6dc2fa87ab07d9acb87bc05ecdc2649">Live command.js</a>
         </h3>
         <pre class="box">
