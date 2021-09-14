@@ -1,81 +1,150 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap');
-body {
-    background-color: #121212e8;
-}
 
-h3 {
+html {
     font-family: 'Lexend Deca', sans-serif;
     color: #FFFF;
+    margin: 0;
+}
+
+section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 740px;
+    padding: 100px 20vw;
 }
 
 .Stian-Wiu {
-    margin-top: 10%;
-    bottom: 400px;
-    text-align: center;
     font-size: 300%;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
+    color: #FFFF;
 }
 
 .Pignuuu {
-    color: #8C8C8C;
+    margin-top: 0;
+    color: #ffffff9d;
     text-align: center;
-    margin-top: 0px;
     font-size: 200%;
 }
 
-.box {
-    margin: auto;
-    width: 85%;
-}
 
-.Description {
-    margin: auto;
-    background-color: #202020;
-    border-radius: 25px;
-    width: 100%;
-    max-width: 700px;
-    height: 70%;
-}
-
-.Description-text {
-    padding: 23px;
-    size: 100%;
-    font-family: 'Roboto Mono', monospace;
-}
-
-.discord-img {
-    width: 30px;
-}
-
-.socials {
-    font-family: 'Roboto Mono', monospace;
-    text-align: center;
-}
-
-.Projects-Button {
-    color: #e24b37;
-    text-align: center;
-    font-size: 190%;
-}
-
-.toggle-projects-button {
-    border-radius: 25px;
-    cursor: pointer;
-    border: 5px solid #e24b37;
-    padding: 10px;
-}
-
-.toggle-projects-button:hover {
-    background-color: #3d3d3de8;
-}
-
-.center {
-    text-align: center;
-    margin-bottom: 0;
-    font-size: 175%;
-}
 
 a {
     color: inherit;
+}
+
+/* Color classes */
+
+.white {
+    background: #FFFF;
+}
+
+.yellow {
+    background: #F8E9A1;
+}
+
+.orange {
+    background: #F76C6C;
+}
+
+.section1 {
+    background: #2127B3;
+}
+
+.section2 {
+    background: #8084FF;
+}
+
+.section3 {
+    background: #24305E;
+}
+
+/* Background waves */
+
+.wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.wave svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 93px;
+}
+
+.wave .shape-fill {
+    fill: #5e64fa;
+}
+
+.wave2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.wave2 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 50px;
+}
+
+.wave2 .shape-fill {
+    fill: #5e64fa;
+}
+
+.wave3 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.wave3 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 22px;
+}
+
+.wave3 .shape-fill {
+    fill: #5e64fa;
+}
+
+.tilt {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.tilt svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 124px;
+}
+
+.tilt .shape-fill {
+    fill: #5e64fa;
+}
+
+.tilt-title {
+    transform: rotate(5deg);
 }
