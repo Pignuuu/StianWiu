@@ -1,3 +1,2 @@
 # StianWiu
 
-Fuck you troy
