@@ -1,81 +1,232 @@
-@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap');
-body {
-    background-color: #121212e8;
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap");
+
+html {
+  font-family: "Lexend Deca", sans-serif;
+  color: #ffff;
+  margin: 0;
 }
 
-h3 {
-    font-family: 'Lexend Deca', sans-serif;
-    color: #FFFF;
+section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 100px 20vw;
 }
 
 .Stian-Wiu {
-    margin-top: 10%;
-    bottom: 400px;
-    text-align: center;
-    font-size: 300%;
-    margin-bottom: 0px;
+  font-size: 5vw;
+  margin-bottom: 10px;
+  color: #ffff;
+  animation: slideInTop 3s;
 }
 
 .Pignuuu {
-    color: #8C8C8C;
-    text-align: center;
-    margin-top: 0px;
-    font-size: 200%;
-}
-
-.box {
-    margin: auto;
-    width: 85%;
-}
-
-.Description {
-    margin: auto;
-    background-color: #202020;
-    border-radius: 25px;
-    width: 100%;
-    max-width: 700px;
-    height: 70%;
-}
-
-.Description-text {
-    padding: 23px;
-    size: 100%;
-    font-family: 'Roboto Mono', monospace;
-}
-
-.discord-img {
-    width: 30px;
-}
-
-.socials {
-    font-family: 'Roboto Mono', monospace;
-    text-align: center;
-}
-
-.Projects-Button {
-    color: #e24b37;
-    text-align: center;
-    font-size: 190%;
-}
-
-.toggle-projects-button {
-    border-radius: 25px;
-    cursor: pointer;
-    border: 5px solid #e24b37;
-    padding: 10px;
-}
-
-.toggle-projects-button:hover {
-    background-color: #3d3d3de8;
-}
-
-.center {
-    text-align: center;
-    margin-bottom: 0;
-    font-size: 175%;
+  margin-top: 0;
+  color: #ffffff9d;
+  text-align: center;
+  font-size: 3vw;
+  animation: slideInLeft 3s;
 }
 
 a {
-    color: inherit;
+  color: inherit;
 }
+
+/* Color classes */
+
+.white {
+  background: #ffff;
+}
+
+.section1 {
+  background: #2127b3;
+}
+
+.section2 {
+  background: #8084ff;
+}
+
+.section3 {
+  background: #24305e;
+}
+
+/* Background waves */
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.wave svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 93px;
+}
+
+.wave .shape-fill {
+  fill: #5e64fa;
+}
+
+.wave2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.wave2 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 50px;
+}
+
+.wave2 .shape-fill {
+  fill: #5e64fa;
+}
+
+.wave3 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.wave3 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 22px;
+}
+
+.wave3 .shape-fill {
+  fill: #5e64fa;
+}
+
+h1 {
+  font-size: 2vw;
+}
+.Description {
+  margin: auto;
+  color: #202020;
+  background-color: #ffffff;
+  border-radius: 25px;
+  width: 100%;
+  max-width: 700px;
+  height: 70%;
+}
+
+.Description-text {
+  padding: 23px;
+  size: 100%;
+  font-family: "Roboto Mono", monospace;
+  line-height: 30px;
+}
+.tilt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.tilt svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 124px;
+}
+
+.tilt .shape-fill {
+  fill: #5e64fa;
+}
+
+/* Keyframe animations for header */
+
+@keyframes slideInTop {
+  0% {
+    opacity: 0;
+    transform: translatey(-500%);
+  }
+
+  95% {
+    transform: translatey(10%);
+  }
+  100% {
+    transform: translatey(0%);
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translatex(-500%);
+  }
+
+  90% {
+    transform: translatex(10%);
+  }
+  100% {
+    transform: translatex(0%);
+  }
+}
+@keyframes opacitydisable {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Css for the Github Widget */
+
+.github-widget {
+  color: black;
+  background-color: white;
+  border-radius: 2em;
+}
+
+.gw-repo-outer {
+  padding: 2em;
+}
+
+.section3 {
+  padding: 10em 3em 1em 3em;
+}
+
+@media (max-width: 960px) {
+  .github-widget {
+    font-size: 10px;
+  }
+  .Description-text {
+    font-size: 15px;
+    line-height: 20px;
+  }
+}
+
+.icon-svg {
+  animation: opacitydisable 5s;
+  width: 2vw;
+  fill: #474de0;
+}
+
+/* #change-purple {
+  fill: red;
+  background-color: red;
+} */
