@@ -225,3 +225,7 @@ h1 {
   width: 3.5vh;
   fill: #474de0;
 }
+
+a svg:hover {
+  transform: translateY(-5px);
+}
