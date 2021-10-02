@@ -17,7 +17,7 @@ section {
 }
 
 .Stian-Wiu {
-  font-size: 5vw;
+  font-size: 5vh;
   margin-bottom: 10px;
   color: #ffff;
   animation: slideInTop 3s;
@@ -27,7 +27,7 @@ section {
   margin-top: 0;
   color: #ffffff9d;
   text-align: center;
-  font-size: 3vw;
+  font-size: 3vh;
   animation: slideInLeft 3s;
 }
 
@@ -118,7 +118,7 @@ a {
 }
 
 h1 {
-  font-size: 2vw;
+  font-size: 4vh;
 }
 .Description {
   margin: auto;
@@ -222,11 +222,6 @@ h1 {
 
 .icon-svg {
   animation: opacitydisable 5s;
-  width: 2vw;
+  width: 3.5vh;
   fill: #474de0;
 }
-
-/* #change-purple {
-  fill: red;
-  background-color: red;
-} */
