@@ -12,12 +12,12 @@ section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 740px;
+  min-height: 100vh;
   padding: 100px 20vw;
 }
 
 .Stian-Wiu {
-  font-size: 300%;
+  font-size: 5vw;
   margin-bottom: 10px;
   color: #ffff;
   animation: slideInTop 3s;
@@ -27,7 +27,7 @@ section {
   margin-top: 0;
   color: #ffffff9d;
   text-align: center;
-  font-size: 200%;
+  font-size: 3vw;
   animation: slideInLeft 3s;
 }
 
@@ -116,6 +116,10 @@ a {
 .wave3 .shape-fill {
   fill: #5e64fa;
 }
+
+h1 {
+  font-size: 2vw;
+}
 .Description {
   margin: auto;
   color: #202020;
@@ -181,6 +185,14 @@ a {
     transform: translatex(0%);
   }
 }
+@keyframes opacitydisable {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
 /* Css for the Github Widget */
 
@@ -207,15 +219,14 @@ a {
     line-height: 20px;
   }
 }
-svg {
-  width: 20px;
+
+.icon-svg {
+  animation: opacitydisable 5s;
+  width: 2vw;
+  fill: #474de0;
 }
 
-.svgs-div {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-items: stretch;
-  align-content: stretch;
-}
+/* #change-purple {
+  fill: red;
+  background-color: red;
+} */
