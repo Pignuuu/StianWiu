@@ -159,15 +159,12 @@ h1 {
 /* Keyframe animations for header */
 
 @keyframes slideInTop {
-  0% {
+  from {
     opacity: 0;
     transform: translatey(-500%);
   }
 
-  95% {
-    transform: translatey(10%);
-  }
-  100% {
+  to {
     transform: translatey(0%);
   }
 }
