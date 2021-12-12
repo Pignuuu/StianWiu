@@ -54,6 +54,21 @@ a {
 }
 
 /* Background waves */
+@keyframes wavesMoving {
+  100% {
+    transform: translatey(-27%);
+  }
+}
+@keyframes wavesMoving2 {
+  100% {
+    transform: translatey(-60%);
+  }
+}
+@keyframes wavesMoving3 {
+  100% {
+    transform: translatey(-80%);
+  }
+}
 
 .wave {
   position: absolute;
@@ -189,6 +204,11 @@ h1 {
   to {
     opacity: 1;
   }
+}
+
+.bob {
+  animation-name: bobUpAndDown;
+  animation-iteration-count: infinite;
 }
 
 /* Css for the Github Widget */
