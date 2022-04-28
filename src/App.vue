@@ -64,8 +64,9 @@ body {
 }
 
 .area {
-  background: #4e54c8;
-  background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);
+  /* Gradient background */
+  background: linear-gradient(to bottom, #4e54c8, #ff4f4f);
+
   width: 100%;
   height: 120em;
 }

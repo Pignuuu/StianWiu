@@ -70,7 +70,7 @@ export default {
 }
 
 .card {
-  background-color: #8086ff;
+  background: #7053b1;
   color: #fff;
   border-radius: 10px;
   padding: 20px;
