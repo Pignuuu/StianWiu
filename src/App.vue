@@ -237,10 +237,10 @@ body {
 }
 @media only screen and (max-width: 1100px) {
   .area {
-    height: 210em;
+    height: 230em;
   }
   .circles {
-    height: 210em;
+    height: 230em;
   }
   @keyframes animate {
     0% {
