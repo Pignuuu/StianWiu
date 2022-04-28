@@ -1,3 +1,24 @@
-# StianWiu
+# stianwiu
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/bb6c1862-27a7-4e0d-b814-2bb375cc8c0f/deploy-status)](https://app.netlify.com/sites/friendly-davinci-fcbd80/deploys)
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
