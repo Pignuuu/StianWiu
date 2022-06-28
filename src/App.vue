@@ -1,275 +1,157 @@
 <template>
-  <div class="area">
-    <!-- Main page code -->
-    <MainPage />
-    <AboutMe />
-    <GithubRepos />
-    <ul class="circles">
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-    </ul>
+  <div class="page">
+    <h1 class="title">STIAN WIU</h1>
+    <h3 class="title-child">WEB DEVELOPER</h3>
+    <div class="socials">
+      <a href="https://twitter.com/pignuuu">
+        <fa :icon="['fab', 'twitter']" />
+      </a>
+      <a href="https://discord.com/users/283331663482585088">
+        <fa :icon="['fab', 'discord']" />
+      </a>
+      <a href="https://github.com/StianWiu">
+        <fa :icon="['fab', 'github']" />
+      </a>
+      <a href="mailto:pignuuu@gmail.com">
+        <fa class="home-button" icon="at" />
+      </a>
+    </div>
+    <img @click="this.scroll()" class="arrow" src="./assets/arrow-down.svg" />
+  </div>
+  <div class="page">
+    <p class="description">
+      Hi! My name is Stian, I'm a student & web developer from South-Eastern
+      Norway. I have been actively coding for a few years now, I code as a hobby
+      but I'm working to become a full time developer in the near future. I am a
+      very introverted person as all developers are, I'm told that I am a very
+      giving person because i love to help others. My favorite number is 3 and
+      my favorite color is <span style="color: #a454ff">#a454ff</span>.
+    </p>
   </div>
 </template>
 
 <script>
-import GithubRepos from "./components/GithubRepos.vue";
-import MainPage from "./components/MainPage.vue";
-import AboutMe from "./components/AboutMe.vue";
-
 export default {
   name: "App",
-  components: {
-    GithubRepos,
-    MainPage,
-    AboutMe,
+  components: {},
+  data() {
+    return {
+      windowTop: 0,
+    };
+  },
+  mounted() {
+    window.addEventListener("scroll", this.onScroll, true);
+  },
+  methods: {
+    onScroll() {
+      // Get the window's scroll position.
+      this.windowTop = window.scrollY;
+      const height = document.body.scrollHeight / 4;
+      if (this.windowTop > height) {
+        // Rotate arrow using css
+        document.querySelector(".arrow").style.transform = "rotate(180deg)";
+      } else {
+        // Rotate arrow using css
+        document.querySelector(".arrow").style.transform = "rotate(0deg)";
+      }
+    },
+    scroll() {
+      const height = document.body.scrollHeight / 4;
+      if (this.windowTop > height) {
+        window.scrollTo(0, 0);
+      } else {
+        window.scrollTo(0, this.windowTop + 1000);
+      }
+    },
   },
 };
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css?family=Exo:400,700");
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400&display=swap");
 
 * {
-  margin: 0px;
-  padding: 0px;
+  font-family: "Source Code Pro", monospace;
+  scroll-behavior: smooth;
+}
+#app {
+  text-align: center;
 }
 
 body {
-  font-family: "Exo", sans-serif;
+  margin: 0;
 }
 
-.context {
-  width: 100%;
-  position: absolute;
-  top: 50vh;
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.context h1 {
-  text-align: center;
-  color: #fff;
-  font-size: 50px;
+.title {
+  margin: 0;
+  letter-spacing: 10px;
+
+  font-weight: bold;
 }
 
-.area {
-  /* Gradient background */
-  background: linear-gradient(to bottom, #4e54c8, #ff4f4f);
-
-  width: 100%;
-  height: 120em;
+.title-child {
+  margin: 0;
+  letter-spacing: 0px;
+  font-size: 15px;
+  font-weight: 200;
 }
 
-.circles {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 120em;
-  overflow: hidden;
+.arrow {
+  width: 50px;
+  height: 50px;
+
+  position: fixed;
+  transition: 0.3s;
+  top: 85vh;
+
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
-.circles li {
-  position: absolute;
-  display: block;
-  list-style: none;
-  width: 20px;
-  height: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  animation: animate 25s linear infinite;
-  bottom: -150px;
+.arrow:hover {
+  cursor: pointer;
+
+  transform: scale(1.2);
 }
 
-.circles li:nth-child(1) {
-  left: 25%;
-  width: 80px;
-  height: 80px;
-  animation-delay: 0s;
+.description {
+  font-size: 20px;
+  font-weight: 200;
+
+  max-width: 700px;
+  margin: 0 20px;
+  padding: 10px;
 }
 
-.circles li:nth-child(2) {
-  left: 10%;
-  width: 20px;
-  height: 20px;
-  animation-delay: 2s;
-  animation-duration: 22s;
+.socials {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 10px;
 }
 
-.circles li:nth-child(3) {
-  left: 70%;
-  width: 20px;
-  height: 20px;
-  animation-delay: 4s;
+.socials > a > svg {
+  color: black;
+  height: 30px;
+  margin: 0 10px;
 }
 
-.circles li:nth-child(4) {
-  left: 40%;
-  width: 60px;
-  height: 60px;
-  animation-delay: 0s;
-  animation-duration: 28s;
+.socials > a {
+  transition: 0.2s;
 }
-
-.circles li:nth-child(5) {
-  left: 65%;
-  width: 20px;
-  height: 20px;
-  animation-delay: 0s;
-}
-
-.circles li:nth-child(6) {
-  left: 75%;
-  width: 110px;
-  height: 110px;
-  animation-delay: 3s;
-}
-
-.circles li:nth-child(7) {
-  left: 35%;
-  width: 150px;
-  height: 150px;
-  animation-delay: 7s;
-}
-
-.circles li:nth-child(8) {
-  left: 50%;
-  width: 25px;
-  height: 25px;
-  animation-delay: 15s;
-  animation-duration: 55s;
-}
-
-.circles li:nth-child(9) {
-  left: 20%;
-  width: 15px;
-  height: 15px;
-  animation-delay: 2s;
-  animation-duration: 45s;
-}
-
-.circles li:nth-child(10) {
-  left: 85%;
-  width: 150px;
-  height: 150px;
-  animation-delay: 0s;
-  animation-duration: 21s;
-}
-.circles li:nth-child(11) {
-  left: 55%;
-  width: 10px;
-  height: 10px;
-  animation-delay: 7s;
-  animation-duration: 21s;
-}
-.circles li:nth-child(12) {
-  left: 34%;
-  width: 60px;
-  height: 60px;
-  animation-delay: 3s;
-  animation-duration: 21s;
-}
-.circles li:nth-child(13) {
-  left: 17%;
-  width: 110px;
-  height: 110px;
-  animation-delay: 10s;
-  animation-duration: 21s;
-}
-.circles li:nth-child(14) {
-  left: 72%;
-  width: 150px;
-  height: 150px;
-  animation-delay: 6s;
-  animation-duration: 21s;
-}
-.circles li:nth-child(15) {
-  left: 35%;
-  width: 150px;
-  height: 150px;
-  animation-delay: 13s;
-  animation-duration: 31s;
-}
-
-@keyframes animate {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-    border-radius: 0;
-  }
-
-  100% {
-    transform: translateY(-2000px) rotate(720deg);
-    opacity: 0;
-    border-radius: 50%;
-  }
-}
-
-@media only screen and (max-width: 1670px) {
-  .area {
-    height: 140em;
-  }
-  .circles {
-    height: 140em;
-  }
-  @keyframes animate {
-    0% {
-      transform: translateY(0) rotate(0deg);
-      opacity: 1;
-      border-radius: 0;
-    }
-
-    100% {
-      transform: translateY(-3000px) rotate(720deg);
-      opacity: 0;
-      border-radius: 50%;
-    }
-  }
-}
-@media only screen and (max-width: 1100px) {
-  .area {
-    height: 230em;
-  }
-  .circles {
-    height: 230em;
-  }
-  @keyframes animate {
-    0% {
-      transform: translateY(0) rotate(0deg);
-      opacity: 1;
-      border-radius: 0;
-    }
-
-    100% {
-      transform: translateY(-4000px) rotate(720deg);
-      opacity: 0;
-      border-radius: 50%;
-    }
-  }
-}
-
-h1 {
-  color: white;
-  font-size: 3em;
-}
-
-h2 {
-  color: white;
-  font-size: 2em;
-}
-
-h3 {
-  color: #ffffffa2;
-  font-size: 1.5em;
+.socials > a:hover {
+  transform: scale(1.2);
 }
 </style>
