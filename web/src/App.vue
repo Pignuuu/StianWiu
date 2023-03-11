@@ -4,6 +4,7 @@
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
 
 html,
 body,
@@ -30,15 +31,22 @@ body,
 }
 
 #app {
-  text-align: center;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
+.retro {
+  font-family: "VT323", monospace;
+}
 /* * {
   border: 1px solid red;
 } */
+
+/* Change colors of selected text */
+::selection {
+  background-color: #e5a4f4;
+  color: white;
+}
 </style>

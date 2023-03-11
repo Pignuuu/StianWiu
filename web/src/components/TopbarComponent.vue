@@ -3,17 +3,7 @@
     <div>
       <p id="title">{{ this.title }}</p>
     </div>
-    <div>
-      <button>
-        <img src="../assets/minimize.svg" />
-      </button>
-      <button @click="this.toggleMaximize(this.windowId)">
-        <img
-          src="../assets/maximize.svg"
-          v-if="!$store.getters.isMaximized(this.windowId)"
-        />
-        <img src="../assets/restore.svg" v-else />
-      </button>
+    <div id="buttons">
       <button @click="$store.dispatch('close', this.windowId)">
         <img src="../assets/close.svg" />
       </button>
@@ -26,15 +16,6 @@ export default {
   name: "TopbarComponent",
   methods: {
     toggleMaximize(id) {
-      // Find window by id then give maximized class
-      const window = document.getElementById(id);
-      if (window === null || window == undefined) return;
-      // If this.getters.isMaximized(id) is true then remove maximized class
-      if (this.$store.getters.isMaximized(id)) {
-        window.classList.remove("maximized");
-      } else {
-        window.classList.add("maximized");
-      }
       this.$store.dispatch("toggleMaximize", id);
     },
   },
@@ -68,6 +49,9 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: nowrap;
+
+  cursor: pointer;
 }
 
 #bar button {
@@ -87,5 +71,13 @@ export default {
 #bar button > img {
   height: 100%;
   width: 100%;
+}
+
+#bar button:hover {
+  background-color: #db9ee9;
+}
+
+#buttons {
+  margin-right: 5px;
 }
 </style>
