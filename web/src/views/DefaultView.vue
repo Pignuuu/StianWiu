@@ -1,39 +1,58 @@
 <template>
-  <div
-    @click="this.focusWindow('Description')"
-    class="window"
-    id="Description"
-    v-drag="{ axis: 'all' }"
-    v-if="!$store.getters.isClosed('Description')"
-  >
-    <TopbarComponent
-      windowId="Description"
-      :title="$store.getters.getTitle('Description')"
-    />
-    <div class="content"></div>
-  </div>
-  <div
-    @click="this.focusWindow('testwindow')"
-    class="window"
-    id="testwindow"
-    v-drag="{ axis: 'all' }"
-    v-if="!$store.getters.isClosed('testwindow')"
-  >
-    <!-- Window id is description -->
-    <TopbarComponent
-      windowId="testwindow"
-      :title="$store.getters.getTitle('testwindow')"
-    />
-    <div class="content"></div>
+  <div id="desktop">
+    <vue-resizable
+      @mousedown="this.focusWindow('Description')"
+      class="window"
+      id="Description"
+      v-if="!$store.getters.isClosed('Description')"
+      width="200"
+      height="200"
+      min-width="200"
+      min-height="100"
+      dragSelector=".topbar"
+      :top="`${$store.getters.getWindowPosition('Description').top}px`"
+      :left="`${$store.getters.getWindowPosition('Description').left}%`"
+      :fit="true"
+    >
+      <TopbarComponent
+        windowId="Description"
+        :title="$store.getters.getTitle('Description')"
+        class="topbar"
+      />
+      <div class="content"></div>
+    </vue-resizable>
+    <vue-resizable
+      @mousedown="this.focusWindow('testwindow')"
+      class="window"
+      id="testwindow"
+      v-if="!$store.getters.isClosed('testwindow')"
+      width="200"
+      height="200"
+      min-width="200"
+      min-height="100"
+      dragSelector=".topbar"
+      :top="`${$store.getters.getWindowPosition('testwindow').top}px`"
+      :left="`${$store.getters.getWindowPosition('testwindow').left}%`"
+      :fit="true"
+    >
+      <TopbarComponent
+        windowId="testwindow"
+        :title="$store.getters.getTitle('testwindow')"
+        class="topbar"
+      />
+      <div class="content"></div>
+    </vue-resizable>
   </div>
 </template>
 
 <script>
+import VueResizable from "vue-resizable";
 import TopbarComponent from "@/components/TopbarComponent.vue";
 export default {
   name: "DefaultView",
   components: {
     TopbarComponent,
+    VueResizable,
   },
   methods: {
     focusWindow(windowId) {
@@ -50,13 +69,34 @@ export default {
 
 <style scoped>
 #Description {
+  position: absolute;
   width: 500px;
   height: 250px;
+  /* top: 10px;
+  right: 45%; */
 }
 
 #testwindow {
+  position: absolute;
   width: 500px;
   height: 250px;
+  /* top: 300px;
+  left: 40%; */
+}
+
+#desktop {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+}
+
+.resizable {
+  width: auto;
+  height: auto;
 }
 
 .content {

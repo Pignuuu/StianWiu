@@ -8,12 +8,16 @@ export default createStore({
         title: 'About me',
         closed: false,
         maximized: false,
+        top: 46,
+        left: 10,
       },
       {
         id: "testwindow",
         title: 'Never gonna give you up',
         closed: false,
         maximized: false,
+        top: 360,
+        left: 53,
       },
     ],
   },
@@ -38,6 +42,13 @@ export default createStore({
         return "";
       }
       return window.title;
+    },
+    getWindowPosition: (state) => (id) => {
+      const window = state.windows.find(w => w.id === id);
+      if (window === undefined || window === null) {
+        return { top: 0, left: 0 };
+      }
+      return { top: window.top, left: window.left };
     }
   },
   mutations: {

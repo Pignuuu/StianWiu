@@ -7,10 +7,10 @@
       <button>
         <img src="../assets/minimize.svg" />
       </button>
-      <button @click="$store.dispatch('toggleMaximize', this.windowId)">
+      <button @click="this.toggleMaximize(this.windowId)">
         <img
           src="../assets/maximize.svg"
-          v-if="$store.getters.isMaximized(this.windowId)"
+          v-if="!$store.getters.isMaximized(this.windowId)"
         />
         <img src="../assets/restore.svg" v-else />
       </button>
@@ -24,7 +24,20 @@
 <script>
 export default {
   name: "TopbarComponent",
-
+  methods: {
+    toggleMaximize(id) {
+      // Find window by id then give maximized class
+      const window = document.getElementById(id);
+      if (window === null || window == undefined) return;
+      // If this.getters.isMaximized(id) is true then remove maximized class
+      if (this.$store.getters.isMaximized(id)) {
+        window.classList.remove("maximized");
+      } else {
+        window.classList.add("maximized");
+      }
+      this.$store.dispatch("toggleMaximize", id);
+    },
+  },
   props: {
     title: {
       type: String,
