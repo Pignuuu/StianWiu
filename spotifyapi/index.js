@@ -66,7 +66,7 @@ app.get('/api/current-track', async (req, res) => {
       const cachedData = JSON.parse(fs.readFileSync('./current-track.json'));
       if (new Date().getTime() - cachedData.last_updated < 10000) {
         // If cached data is less than 10 seconds old, return cached data
-        res.data.is_playing = cachedData.was_playing;
+        cachedData.is_playing = cachedData.was_playing;
         res.json(cachedData);
         return;
       }
