@@ -64,8 +64,16 @@ app.get('/api/current-track', async (req, res) => {
     const response = await axios.get('https://api.spotify.com/v1/me/player/currently-playing', {
       headers: { Authorization: `Bearer ${tokenData.access_token}` },
     });
+    // if response.data is null, no song is playing so return cached data
+    if (response.data) {
+      res.json(response.data);
+      // cache data in file
+      fs.writeFileSync('./current-track.json', JSON.stringify(response.data));
 
-    res.send(response.data);
+    } else {
+      // if no song is playing, return cached data
+      res.json(JSON.parse(fs.readFileSync('./current-track.json')));
+    }
   } catch (error) {
     console.error(error);
     res.status(500).send('Error getting current track');
