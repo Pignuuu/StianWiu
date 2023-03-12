@@ -8,24 +8,44 @@ export default createStore({
         title: 'About me - Notepad.exe',
         closed: false,
         maximized: false,
-        top: Math.floor(Math.random() * 100) + 10,
-        left: Math.floor(Math.random() * 60) + 10,
-        width: "550px",
-        height: "300px",
-        minWidth: 300,
-        minHeight: 100,
+        desktop: {
+          top: Math.floor(Math.random() * 100) + 10,
+          left: Math.floor(Math.random() * 60) + 10,
+          width: "550px",
+          height: "300px",
+          minWidth: 300,
+          minHeight: 100,
+        },
+        mobile: {
+          left: Math.floor(Math.random() * 30) + 2,
+          top: Math.floor(Math.random() * 100) + 10,
+          width: "250px",
+          height: "200px",
+          minWidth: 250,
+          minHeight: 200,
+        },
       },
       {
         id: "SpotifyStatus",
         title: 'StianWiu - Spotify.exe',
         closed: false,
         maximized: false,
-        top: Math.floor(Math.random() * 100) + 360,
-        left: Math.floor(Math.random() * 60) + 10,
-        width: "400px",
-        height: "250px",
-        minWidth: 400,
-        minHeight: 200,
+        desktop: {
+          top: Math.floor(Math.random() * 100) + 360,
+          left: Math.floor(Math.random() * 60) + 10,
+          width: "400px",
+          height: "250px",
+          minWidth: 400,
+          minHeight: 200,
+        },
+        mobile: {
+          left: Math.floor(Math.random() * 33) + 2,
+          top: Math.floor(Math.random() * 100) + 360,
+          width: "250px",
+          height: "200px",
+          minWidth: 250,
+          minHeight: 200,
+        },
       },
     ],
   },
@@ -56,16 +76,35 @@ export default createStore({
       if (window === undefined || window === null) {
         return { top: 0, left: 0, width: 0, height: 0, minWidth: 0, minHeight: 0, maximized: false, closed: true };
       }
-      return {
-        top: window.top,
-        left: window.left,
-        width: window.width,
-        height: window.height,
-        minWidth: window.minWidth,
-        minHeight: window.minHeight,
-        maximized: window.maximized,
-        closed: window.closed
-      };
+
+      // If screen is less than 600px, use mobile settings
+      // Use a alternative way to get the window width, since window.innerWidth is not working
+      if (document.documentElement.clientWidth < 600) {
+        console.log("Mobile");
+        return {
+          top: window.mobile.top,
+          left: window.mobile.left,
+          width: window.mobile.width,
+          height: window.mobile.height,
+          minWidth: window.mobile.minWidth,
+          minHeight: window.mobile.minHeight,
+          maximized: window.maximized,
+          closed: window.closed,
+        }
+      } else {
+        console.log("Desktop");
+        return {
+          top: window.desktop.top,
+          left: window.desktop.left,
+          width: window.desktop.width,
+          height: window.desktop.height,
+          minWidth: window.desktop.minWidth,
+          minHeight: window.desktop.minHeight,
+          maximized: window.maximized,
+          closed: window.closed,
+        }
+      }
+
     }
   },
   mutations: {
@@ -116,7 +155,7 @@ export default createStore({
       // Force vue to re-render the window
       window.closed = true;
       window.closed = false;
-    }
+    },
   },
   modules: {
   }

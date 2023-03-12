@@ -165,14 +165,16 @@ export default {
     };
   },
   async created() {
+    // Run mobile check
     await axios({
       method: "get",
-      // url: "http://192.168.10.139:3000/api/current-track",
-      url: "https://stianwiu.me/api/current-track",
+      url: "http://192.168.10.139:3000/api/current-track",
+      // url: "https://stianwiu.me/api/current-track",
     }).then((res) => {
       this.spotify = res.data;
       console.log(res.data);
     });
+    console.log(this.$store.getters.getWindow("SpotifyStatus"));
     // 2018-01-07T15:06:54
     setInterval(() => {
       const pastDate = new Date("2018-01-07T15:06:54");
@@ -202,8 +204,8 @@ export default {
     setInterval(async () => {
       await axios({
         method: "get",
-        // url: "http://192.168.10.139:3000/api/current-track",
-        url: "https://stianwiu.me/api/current-track",
+        url: "http://192.168.10.139:3000/api/current-track",
+        // url: "https://stianwiu.me/api/current-track",
       }).then((res) => {
         this.spotify = res.data;
         console.log(res.data);
@@ -435,6 +437,29 @@ export default {
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+/* If mobile */
+@media screen and (max-width: 600px) {
+  #Description .content {
+    font-size: 15px;
+  }
+
+  .spotify-img {
+    width: 70px;
+  }
+
+  .spotify-title {
+    font-size: 20px;
+  }
+
+  #spotify-progressbar {
+    width: 120px;
+  }
+
+  .disc {
+    width: 25px;
   }
 }
 </style>
