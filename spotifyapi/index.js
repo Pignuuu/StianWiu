@@ -61,6 +61,16 @@ app.get('/api/current-track', async (req, res) => {
       await refreshAccessToken();
     }
 
+    // Check if cached was less than 10 seconds ago
+    if (fs.existsSync('./current-track.json')) {
+      const cachedData = JSON.parse(fs.readFileSync('./current-track.json'));
+      if (new Date().getTime() - cachedData.last_updated < 10000) {
+        // If cached data is less than 10 seconds old, return cached data
+        res.json(cachedData);
+        return;
+      }
+    }
+
     const response = await axios.get('https://api.spotify.com/v1/me/player/currently-playing', {
       headers: { Authorization: `Bearer ${tokenData.access_token}` },
     });
@@ -69,6 +79,7 @@ app.get('/api/current-track', async (req, res) => {
       res.json(response.data);
       // cache data in file
       response.data.is_playing = false;
+      response.data.last_updated = new Date().getTime();
       // Change is_playing to false
       fs.writeFileSync('./current-track.json', JSON.stringify(response.data));
 
