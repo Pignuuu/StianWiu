@@ -25,3 +25,5 @@ pnpm-debug.log*
 tokens.json
 .tokens.json
 .tokens.*
+current-track.json
+.current-track.json
