@@ -80,4 +80,10 @@ export default {
 #buttons {
   margin-right: 5px;
 }
+
+@media screen and (max-width: 600px) {
+  #title {
+    font-size: 10px;
+  }
+}
 </style>
