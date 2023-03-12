@@ -85,3 +85,20 @@ app.get('/api/current-track', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
+
+setInterval(async () => {
+  try {
+    if (!tokenData.access_token || new Date().getTime() > tokenData.token_expiration) {
+      await refreshAccessToken();
+    }
+
+    const response = await axios.get('https://api.spotify.com/v1/me/player/currently-playing', {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` },
+    });
+    // if response.data is null, no song is playing so return cached data
+    response.data.is_playing = false;
+    fs.writeFileSync('./current-track.json', JSON.stringify(response.data));
+  } catch (error) {
+    console.error(error);
+  }
+}, 1000 * 60 * 5);
