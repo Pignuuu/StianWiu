@@ -95,9 +95,10 @@ setInterval(async () => {
     const response = await axios.get('https://api.spotify.com/v1/me/player/currently-playing', {
       headers: { Authorization: `Bearer ${tokenData.access_token}` },
     });
-    // if response.data is null, no song is playing so return cached data
-    response.data.is_playing = false;
-    fs.writeFileSync('./current-track.json', JSON.stringify(response.data));
+    if (response.data) {
+      response.data.is_playing = false;
+      fs.writeFileSync('./current-track.json', JSON.stringify(response.data));
+    }
   } catch (error) {
     console.error(error);
   }
