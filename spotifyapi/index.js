@@ -68,6 +68,8 @@ app.get('/api/current-track', async (req, res) => {
     if (response.data) {
       res.json(response.data);
       // cache data in file
+      response.data.is_playing = false;
+      // Change is_playing to false
       fs.writeFileSync('./current-track.json', JSON.stringify(response.data));
 
     } else {
