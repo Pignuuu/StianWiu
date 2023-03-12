@@ -168,8 +168,8 @@ export default {
     // Run mobile check
     await axios({
       method: "get",
-      url: "http://192.168.10.139:3000/api/current-track",
-      // url: "https://stianwiu.me/api/current-track",
+      // url: "http://192.168.10.139:3000/api/current-track",
+      url: "https://stianwiu.me/api/current-track",
     }).then((res) => {
       this.spotify = res.data;
       console.log(res.data);
@@ -204,8 +204,8 @@ export default {
     setInterval(async () => {
       await axios({
         method: "get",
-        url: "http://192.168.10.139:3000/api/current-track",
-        // url: "https://stianwiu.me/api/current-track",
+        // url: "http://192.168.10.139:3000/api/current-track",
+        url: "https://stianwiu.me/api/current-track",
       }).then((res) => {
         this.spotify = res.data;
         console.log(res.data);
