@@ -19,7 +19,7 @@
         :title="$store.getters.getTitle('Description')"
         class="topbar"
       />
-      <div class="content retro">
+      <div contenteditable="true" class="content retro">
         Hi! I'm <span style="color: #e5a4f4">Stian</span>, I'm a student & web
         developer from South-Eastern Norway. I have been actively coding for
         <span v-html="this.codingAge"></span>.
@@ -280,6 +280,9 @@ export default {
   height: 100%;
 
   background-color: #6a50e9;
+
+  /* Remove selection outline */
+  outline: none;
 }
 
 .window {
