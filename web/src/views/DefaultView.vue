@@ -162,7 +162,7 @@ export default {
     // Fetch spotify data from websocket https://192.168.10.139:8123/api/spotify/current-track
     let connection = new WebSocket(
       // "ws://192.168.10.139:8132/api/spotify/current-track"
-      "ws://stianwiu.me/api/spotify/current-track"
+      "wss://stianwiu.me/api/spotify/current-track"
     );
 
     connection.onmessage = (e) => {
@@ -174,7 +174,7 @@ export default {
       setTimeout(() => {
         connection = new WebSocket(
           // "ws://192.168.10.139:8132/api/spotify/current-track"
-          "ws://stianwiu.me/api/spotify/current-track"
+          "wss://stianwiu.me/api/spotify/current-track"
         );
       }, 1000);
     };
