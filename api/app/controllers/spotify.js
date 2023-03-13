@@ -4,7 +4,7 @@ const axios = require('axios');
 const btoa = require('btoa');
 const fs = require('fs');
 const app = express();
-const port = process.env.PORT || 3000;
+const expressWs = require('express-ws')(app);
 const cors = require('cors');
 app.use(cors());
 
@@ -55,50 +55,6 @@ if (!tokenData.refresh_token) {
   }
 }
 
-app.get('/api/current-track', async (req, res) => {
-  try {
-    if (!tokenData.access_token || new Date().getTime() > tokenData.token_expiration) {
-      await refreshAccessToken();
-    }
-
-    // Check if cached was less than 10 seconds ago
-    if (fs.existsSync('./current-track.json')) {
-      const cachedData = JSON.parse(fs.readFileSync('./current-track.json'));
-      if (new Date().getTime() - cachedData.last_updated < 10000) {
-        // If cached data is less than 10 seconds old, return cached data
-        cachedData.is_playing = cachedData.was_playing;
-        res.json(cachedData);
-        return;
-      }
-    }
-
-    const response = await axios.get('https://api.spotify.com/v1/me/player/currently-playing', {
-      headers: { Authorization: `Bearer ${tokenData.access_token}` },
-    });
-    // if response.data is null, no song is playing so return cached data
-    if (response.data) {
-      res.json(response.data);
-      // cache data in file
-      response.data.was_playing = response.data.is_playing;
-      response.data.is_playing = false;
-      response.data.last_updated = new Date().getTime();
-      // Change is_playing to false
-      fs.writeFileSync('./current-track.json', JSON.stringify(response.data));
-
-    } else {
-      // if no song is playing, return cached data
-      res.json(JSON.parse(fs.readFileSync('./current-track.json')));
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error getting current track');
-  }
-});
-
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});
-
 setInterval(async () => {
   try {
     if (!tokenData.access_token || new Date().getTime() > tokenData.token_expiration) {
@@ -109,10 +65,47 @@ setInterval(async () => {
       headers: { Authorization: `Bearer ${tokenData.access_token}` },
     });
     if (response.data) {
-      response.data.is_playing = false;
       fs.writeFileSync('./current-track.json', JSON.stringify(response.data));
+    } else {
+      const data = JSON.parse(fs.readFileSync('./current-track.json'));
+      data.is_playing = false;
+      fs.writeFileSync('./current-track.json', JSON.stringify(data));
     }
   } catch (error) {
     console.error(error);
   }
-}, 1000 * 60 * 5);
+}, 3000);
+
+
+module.exports = {
+  currentTrack: async function (ws, req) {
+    let data = JSON.parse(fs.readFileSync('./current-track.json'));
+    let newData = {};
+    newData.progress = data.progress_ms;
+    newData.duration = data.item.duration_ms;
+    newData.is_playing = data.is_playing;
+    newData.title = data.item.name;
+    newData.artist = data.item.artists[0].name;
+    newData.album = data.item.album.name;
+    newData.album_art = data.item.album.images[0].url;
+    newData.release_date = data.item.album.release_date;
+    newData.external_url = data.item.external_urls.spotify;
+    newData.preview_url = data.item.preview_url;
+    ws.send(JSON.stringify(newData));
+    setInterval(async () => {
+      let data = JSON.parse(fs.readFileSync('./current-track.json'));
+      let newData = {};
+      newData.progress = data.progress_ms;
+      newData.duration = data.item.duration_ms;
+      newData.is_playing = data.is_playing;
+      newData.title = data.item.name;
+      newData.artist = data.item.artists[0].name;
+      newData.album = data.item.album.name;
+      newData.album_art = data.item.album.images[0].url;
+      newData.release_date = data.item.album.release_date;
+      newData.external_url = data.item.external_urls.spotify;
+      newData.preview_url = data.item.preview_url;
+      ws.send(JSON.stringify(newData));
+    }, 3000);
+  }
+};

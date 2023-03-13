@@ -80,7 +80,6 @@ export default createStore({
       // If screen is less than 600px, use mobile settings
       // Use a alternative way to get the window width, since window.innerWidth is not working
       if (document.documentElement.clientWidth < 600) {
-        console.log("Mobile");
         return {
           top: window.mobile.top,
           left: window.mobile.left,
@@ -92,7 +91,6 @@ export default createStore({
           closed: window.closed,
         }
       } else {
-        console.log("Desktop");
         return {
           top: window.desktop.top,
           left: window.desktop.left,

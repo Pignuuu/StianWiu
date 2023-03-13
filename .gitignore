@@ -2,3 +2,7 @@
 spotifyapi/.env
 
 spotifyapi/current-track.json
+
+api/current-track.json
+
+api/tokens.json

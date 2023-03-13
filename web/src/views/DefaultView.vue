@@ -57,27 +57,24 @@
             <a
               target="_blank"
               rel="noopener noreferrer"
-              :href="`${spotify.item.external_urls.spotify}`"
+              :href="`${spotify.external_url}`"
             >
-              <img
-                class="spotify-img"
-                :src="spotify.item.album.images[0].url"
-              />
+              <img class="spotify-img" :src="spotify.album_art" />
             </a>
             <div class="stats">
-              <span class="spotify-title">{{ spotify.item.name }}</span>
-              <span class="spotify-artist">{{
-                spotify.item.artists[0].name
-              }}</span>
+              <span class="spotify-title">{{ spotify.name }}</span>
+              <span class="spotify-artist">{{ spotify.artist }}</span>
               <div id="spotify-progress">
                 <img
-                  title="Currently playing"
+                  @click="this.togglePreview()"
+                  title="Listen to preview"
                   v-if="spotify.is_playing"
                   class="disc spinning"
                   src="../assets/icons/Disc.svg"
                 />
                 <img
-                  title="Currently paused"
+                  @click="this.togglePreview()"
+                  title="Listen to preview"
                   v-else
                   class="disc"
                   src="../assets/icons/Disc.svg"
@@ -85,13 +82,11 @@
                 <div class="progress">
                   <ProgressbarComponent
                     id="spotify-progressbar"
-                    :value="
-                      (spotify.progress_ms / spotify.item.duration_ms) * 100
-                    "
+                    :value="(spotify.progress / spotify.duration) * 100"
                   />
                 </div>
               </div>
-              {{ this.spotify.item.album.release_date }}
+              {{ this.spotify.release_date }}
             </div>
           </div>
         </div>
@@ -125,7 +120,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import VueResizable from "vue-resizable";
 import TopbarComponent from "@/components/TopbarComponent.vue";
 import ProgressbarComponent from "@/components/ProgressbarComponent.vue";
@@ -165,17 +159,26 @@ export default {
     };
   },
   async created() {
-    // Run mobile check
-    await axios({
-      method: "get",
-      // url: "http://192.168.10.139:3000/api/current-track",
-      url: "https://stianwiu.me/api/current-track",
-    }).then((res) => {
-      this.spotify = res.data;
-      console.log(res.data);
-    });
-    console.log(this.$store.getters.getWindow("SpotifyStatus"));
-    // 2018-01-07T15:06:54
+    // Fetch spotify data from websocket https://192.168.10.139:8123/api/spotify/current-track
+    let connection = new WebSocket(
+      // "ws://192.168.10.139:8132/api/spotify/current-track"
+      "ws://stianwiu.me/api/spotify/current-track"
+    );
+
+    connection.onmessage = (e) => {
+      this.spotify = JSON.parse(e.data);
+    };
+
+    // If connection is closed, try to reconnect
+    connection.onclose = () => {
+      setTimeout(() => {
+        connection = new WebSocket(
+          // "ws://192.168.10.139:8132/api/spotify/current-track"
+          "ws://stianwiu.me/api/spotify/current-track"
+        );
+      }, 1000);
+    };
+
     setInterval(() => {
       const pastDate = new Date("2018-01-07T15:06:54");
 
@@ -200,17 +203,6 @@ export default {
       // Set the time
       this.time = `<span style="color: #6a50e9;">${new Date().toLocaleTimeString()}</span>`;
     }, 100);
-
-    setInterval(async () => {
-      await axios({
-        method: "get",
-        // url: "http://192.168.10.139:3000/api/current-track",
-        url: "https://stianwiu.me/api/current-track",
-      }).then((res) => {
-        this.spotify = res.data;
-        console.log(res.data);
-      });
-    }, 15000);
   },
   components: {
     TopbarComponent,
@@ -231,6 +223,32 @@ export default {
     },
     openWindow(windowId) {
       this.$store.dispatch("openWindow", windowId);
+    },
+    togglePreview() {
+      // Audio url is this.spotify.preview_url
+      if (this.previewPlaying) {
+        // Stop the audio
+        const audio = document.getElementById("preview");
+        audio.pause();
+        audio.remove();
+      } else {
+        // There is no audio element, create one
+        const audio = document.createElement("audio");
+        audio.volume = 0.1;
+        audio.src = this.spotify.preview_url;
+        audio.controls = true;
+        audio.autoplay = true;
+        audio.id = "preview";
+        audio.style.display = "none";
+        document.body.appendChild(audio);
+        // When the audio is done playing, remove the element
+        audio.onended = () => {
+          audio.remove();
+          this.previewPlaying = false;
+        };
+      }
+
+      this.previewPlaying = !this.previewPlaying;
     },
   },
 };
@@ -428,6 +446,7 @@ export default {
 
 .disc {
   width: 40px;
+  cursor: pointer;
 }
 
 .spinning {
