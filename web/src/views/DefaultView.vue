@@ -62,7 +62,7 @@
               <img class="spotify-img" :src="spotify.album_art" />
             </a>
             <div class="stats">
-              <span class="spotify-title">{{ spotify.name }}</span>
+              <span class="spotify-title">{{ spotify.title }}</span>
               <span class="spotify-artist">{{ spotify.artist }}</span>
               <div id="spotify-progress">
                 <img
