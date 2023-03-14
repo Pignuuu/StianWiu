@@ -198,7 +198,7 @@ export default {
       month %= 12;
 
       // Set the coding age
-      this.codingAge = `<span style="color: #e5a4f4;">${year}</span> years,<span style="color: #e5a4f4;">${month}</span> months,<span style="color: #e5a4f4;">${day}</span> days,<span style="color: #e5a4f4;">${hour}</span> hours,<span style="color: #e5a4f4;">${minute}</span> minutes, <span style="color: #e5a4f4;">${second}</span>seconds`;
+      this.codingAge = `<span style="color: #e5a4f4;">${year}</span> years,<span style="color: #e5a4f4;">${month}</span> months,<span style="color: #e5a4f4;">${day}</span> days,<span style="color: #e5a4f4;">${hour}</span> hours,<span style="color: #e5a4f4;">${minute}</span> minutes, <span style="color: #e5a4f4;">${second}</span> seconds`;
 
       // Set the time
       this.time = `<span style="color: #6a50e9;">${new Date().toLocaleTimeString()}</span>`;
