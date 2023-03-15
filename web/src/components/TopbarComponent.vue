@@ -1,7 +1,7 @@
 <template>
   <div id="bar">
     <div>
-      <p id="title">{{ this.title }}</p>
+      <p class="disable-selection" id="title">{{ this.title }}</p>
     </div>
     <div id="buttons">
       <button @click="$store.dispatch('close', this.windowId)">
@@ -14,11 +14,6 @@
 <script>
 export default {
   name: "TopbarComponent",
-  methods: {
-    toggleMaximize(id) {
-      this.$store.dispatch("toggleMaximize", id);
-    },
-  },
   props: {
     title: {
       type: String,

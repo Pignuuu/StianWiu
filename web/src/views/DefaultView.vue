@@ -5,14 +5,16 @@
       class="window"
       id="Description"
       v-if="!$store.getters.getWindow('Description').closed"
-      :width="$store.getters.getWindow('Description').width"
-      :height="$store.getters.getWindow('Description').height"
+      :width="this.windowObjects.Description.width"
+      :height="this.windowObjects.Description.height"
       :min-width="$store.getters.getWindow('Description').minWidth"
       :min-height="$store.getters.getWindow('Description').minHeight"
       dragSelector=".topbar"
-      :top="`${$store.getters.getWindow('Description').top}px`"
-      :left="`${$store.getters.getWindow('Description').left}%`"
-      :fit="true"
+      :top="`${this.windowObjects.Description.top}px`"
+      :left="`${this.windowObjects.Description.left}px`"
+      :fit-parent="true"
+      @resize:end="windowHandler('Description', $event)"
+      @drag:end="windowHandler('Description', $event)"
     >
       <TopbarComponent
         windowId="Description"
@@ -38,12 +40,15 @@
       id="SpotifyStatus"
       dragSelector=".topbar"
       v-if="!$store.getters.getWindow('SpotifyStatus').closed"
-      :width="$store.getters.getWindow('SpotifyStatus').width"
-      :height="$store.getters.getWindow('SpotifyStatus').height"
+      :width="this.windowObjects.SpotifyStatus.width"
+      :height="this.windowObjects.SpotifyStatus.height"
       :min-width="$store.getters.getWindow('SpotifyStatus').minWidth"
       :min-height="$store.getters.getWindow('SpotifyStatus').minHeight"
-      :top="`${$store.getters.getWindow('SpotifyStatus').top}px`"
-      :left="`${$store.getters.getWindow('SpotifyStatus').left}%`"
+      :top="`${this.windowObjects.SpotifyStatus.top}px`"
+      :left="`${this.windowObjects.SpotifyStatus.left}px`"
+      :fit-parent="true"
+      @resize:end="windowHandler('SpotifyStatus', $event)"
+      @drag:end="windowHandler('SpotifyStatus', $event)"
     >
       <TopbarComponent
         windowId="SpotifyStatus"
@@ -59,12 +64,15 @@
               rel="noopener noreferrer"
               :href="`${spotify.external_url}`"
             >
-              <img class="spotify-img" :src="spotify.album_art" />
+              <img
+                class="spotify-img disable-selection"
+                :src="spotify.album_art"
+              />
             </a>
             <div class="stats">
               <span class="spotify-title">{{ spotify.title }}</span>
               <span class="spotify-artist">{{ spotify.artist }}</span>
-              <div id="spotify-progress">
+              <div id="spotify-progress" class="disable-selection">
                 <img
                   @click="this.togglePreview()"
                   title="Listen to preview"
@@ -92,8 +100,22 @@
         </div>
       </div>
     </vue-resizable>
-    <div id="taskbar">
+    <vue-resizable
+      width="100"
+      :height="55"
+      id="taskbar"
+      top="100"
+      min-height="55"
+    >
       <div id="apps">
+        <div
+          class="taskbar-item disable-selection"
+          title="Reset windows to default"
+          @click="this.resetWindows"
+          id="resetWindows"
+        >
+          <img class="icon" src="../assets/icons/Reset.svg" />
+        </div>
         <div
           v-for="window in $store.state.windows"
           :key="window.id"
@@ -101,21 +123,28 @@
         >
           <div
             @click="this.openWindow(window.id)"
-            id="taskbar-item"
+            class="taskbar-item"
             v-if="window.closed"
           >
-            <img class="icon" :src="this.getImgUrl(window.id)" />
+            <img
+              class="icon disable-selection"
+              :src="this.getImgUrl(window.id)"
+            />
           </div>
-          <div v-else id="taskbar-item-open" class="active">
+          <div
+            @click="$store.dispatch('close', window.id)"
+            v-else
+            class="active taskbar-item-open disable-selection"
+          >
             <img class="icon" :src="this.getImgUrl(window.id)" />
           </div>
         </div>
       </div>
-      <div id="extra">
+      <div id="extra" class="disable-selection">
         <img class="icon" src="../assets/icons/Wifi.svg" />
         <span v-html="this.time"></span>
       </div>
-    </div>
+    </vue-resizable>
   </div>
 </template>
 
@@ -130,55 +159,43 @@ export default {
       codingAge: 0,
       time: 0,
       spotify: undefined,
-      options: {
-        text: {
-          color: "#FFFFFF",
-          shadowEnable: true,
-          shadowColor: "#000000",
-          fontSize: 14,
-          fontFamily: "Helvetica",
-          dynamicPosition: false,
-          hideText: false,
-        },
-        progress: {
-          color: "#2dbd2d",
-          backgroundColor: "#333333",
-          inverted: false,
-        },
-        layout: {
-          height: 35,
-          width: 140,
-          verticalTextAlign: 61,
-          horizontalTextAlign: 43,
-          zeroOffset: 0,
-          strokeWidth: 30,
-          progressPadding: 0,
-          type: "line",
-        },
-      },
+      windowObjects: localStorage.getItem("windows"),
     };
   },
   async created() {
-    // Fetch spotify data from websocket https://192.168.10.139:8123/api/spotify/current-track
-    let connection = new WebSocket(
-      // "ws://192.168.10.139:8132/api/spotify/current-track"
-      "wss://stianwiu.me/api/spotify/current-track"
-    );
+    // Create window positions in local storage if they don't exist.
+    if (localStorage.getItem("windows") === null) {
+      for (let window in this.$store.state.windows) {
+        let id = this.$store.state.windows[window].id;
+        let windowDimensions = this.$store.getters.getWindow(id);
+        let tempObject = {};
 
-    connection.onmessage = (e) => {
-      this.spotify = JSON.parse(e.data);
-    };
+        // Stop the object being called "id" and use it's fucking name
+        tempObject[id] = {
+          top: windowDimensions.top,
+          left: windowDimensions.left,
+          width: windowDimensions.width,
+          height: windowDimensions.height,
+        };
 
-    // If connection is closed, try to reconnect
-    connection.onclose = () => {
-      setTimeout(() => {
-        connection = new WebSocket(
-          // "ws://192.168.10.139:8132/api/spotify/current-track"
-          "wss://stianwiu.me/api/spotify/current-track"
-        );
-      }, 1000);
-    };
+        if (localStorage.getItem("windows") === null) {
+          localStorage.setItem("windows", JSON.stringify(tempObject));
+        } else {
+          let temp = JSON.parse(localStorage.getItem("windows"));
+          temp[id] = {
+            top: windowDimensions.top,
+            left: windowDimensions.left,
+            width: windowDimensions.width,
+            height: windowDimensions.height,
+          };
+          localStorage.setItem("windows", JSON.stringify(temp));
+        }
+      }
+    }
 
+    this.windowObjects = JSON.parse(localStorage.getItem("windows"));
+
+    // Set the time
     setInterval(() => {
       const pastDate = new Date("2018-01-07T15:06:54");
 
@@ -203,6 +220,26 @@ export default {
       // Set the time
       this.time = `<span style="color: #6a50e9;">${new Date().toLocaleTimeString()}</span>`;
     }, 100);
+
+    // Connect to websocket
+    let connection = new WebSocket(
+      // "ws://192.168.10.139:8132/api/spotify/current-track"
+      "wss://stianwiu.me/api/spotify/current-track"
+    );
+
+    connection.onmessage = (e) => {
+      this.spotify = JSON.parse(e.data);
+    };
+
+    // If connection is closed, try to reconnect
+    connection.onclose = () => {
+      setTimeout(() => {
+        connection = new WebSocket(
+          // "ws://192.168.10.139:8132/api/spotify/current-track"
+          "wss://stianwiu.me/api/spotify/current-track"
+        );
+      }, 1000);
+    };
   },
   components: {
     TopbarComponent,
@@ -249,6 +286,55 @@ export default {
       }
 
       this.previewPlaying = !this.previewPlaying;
+    },
+    windowHandler(id, event) {
+      let windows = localStorage.getItem("windows");
+      windows = JSON.parse(windows);
+
+      let window = windows[id];
+
+      window = {
+        top: event.top,
+        left: event.left,
+        width: event.width,
+        height: event.height,
+      };
+
+      windows[id] = window;
+
+      localStorage.setItem("windows", JSON.stringify(windows));
+
+      this.windowObjects = JSON.parse(localStorage.getItem("windows"));
+    },
+    async resetWindows() {
+      localStorage.removeItem("windows");
+      for (let window in this.$store.state.windows) {
+        let id = this.$store.state.windows[window].id;
+        let windowDimensions = this.$store.getters.getWindow(id);
+        let tempObject = {};
+
+        // Stop the object being called "id" and use it's fucking name
+        tempObject[id] = {
+          top: windowDimensions.top,
+          left: windowDimensions.left,
+          width: windowDimensions.width,
+          height: windowDimensions.height,
+        };
+
+        if (localStorage.getItem("windows") === null) {
+          localStorage.setItem("windows", JSON.stringify(tempObject));
+        } else {
+          let temp = JSON.parse(localStorage.getItem("windows"));
+          temp[id] = {
+            top: windowDimensions.top,
+            left: windowDimensions.left,
+            width: windowDimensions.width,
+            height: windowDimensions.height,
+          };
+          localStorage.setItem("windows", JSON.stringify(temp));
+        }
+      }
+      window.location.reload();
     },
   },
 };
@@ -327,23 +413,27 @@ export default {
   background-color: #e5a4f4;
 
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 }
 
 #apps {
+  margin-top: 5px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   flex-direction: row;
-  overflow-x: auto;
-  overflow-y: hidden;
-  height: 100%;
+  flex-wrap: wrap;
+  /* height: 100%; */
   width: 100%;
 }
 
-#taskbar-item,
-#taskbar-item-open {
+#apps > div {
+  margin-bottom: 5px;
+}
+
+.taskbar-item,
+.taskbar-item-open {
   width: 45px;
   height: 45px;
   margin: 0 5px;
@@ -354,18 +444,18 @@ export default {
   cursor: pointer;
 }
 
-#taskbar-item .icon,
-#taskbar-item-open .icon {
+.taskbar-item .icon,
+.taskbar-item-open .icon {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-#taskbar-item:hover {
+.taskbar-item:hover {
   background-color: #5d46cf;
 }
 
-#taskbar-item-open {
+.taskbar-item-open {
   background-color: #6950e9af;
 }
 

@@ -24,6 +24,8 @@ body,
 
   font-size: 13px;
   font-weight: 200;
+
+  overflow: hidden;
 }
 
 * {
@@ -48,5 +50,12 @@ body,
 ::selection {
   background-color: #e5a4f4;
   color: white;
+}
+
+.disable-selection {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 </style>

@@ -9,16 +9,16 @@ export default createStore({
         closed: false,
         maximized: false,
         desktop: {
-          top: Math.floor(Math.random() * 100) + 10,
-          left: Math.floor(Math.random() * 60) + 10,
+          top: 50,
+          left: document.documentElement.clientWidth / 2 - 275,
           width: "550px",
           height: "300px",
           minWidth: 300,
           minHeight: 100,
         },
         mobile: {
-          left: Math.floor(Math.random() * 30) + 2,
-          top: Math.floor(Math.random() * 100) + 10,
+          top: 25,
+          left: document.documentElement.clientWidth / 2 - 125,
           width: "250px",
           height: "200px",
           minWidth: 250,
@@ -31,16 +31,16 @@ export default createStore({
         closed: false,
         maximized: false,
         desktop: {
-          top: Math.floor(Math.random() * 100) + 360,
-          left: Math.floor(Math.random() * 60) + 10,
+          top: 380,
+          left: document.documentElement.clientWidth / 2 - 200,
           width: "400px",
           height: "250px",
           minWidth: 400,
           minHeight: 200,
         },
         mobile: {
-          left: Math.floor(Math.random() * 33) + 2,
-          top: Math.floor(Math.random() * 100) + 360,
+          top: 250,
+          left: document.documentElement.clientWidth / 2 - 125,
           width: "250px",
           height: "200px",
           minWidth: 250,
@@ -129,7 +129,6 @@ export default createStore({
       if (window === undefined || window === null) {
         return;
       }
-
       // If the window is not maximized, set the width and height to 100%, and set the top and left to 0.
       // In order to restore the window to its original size, we need to store the original size in the state.
       if (!window.maximized) {
