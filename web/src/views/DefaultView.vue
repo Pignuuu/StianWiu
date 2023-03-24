@@ -100,6 +100,16 @@
         </div>
       </div>
     </vue-resizable>
+    <!-- v-for all cursors in this.cursors -->
+    <div v-for="(cursor, index) in this.cursors" :key="index">
+      <!-- Change positions using cursor.x cursor.y -->
+      <img
+        src="../assets/icons/cursor.svg"
+        id="cursor"
+        :style="`top: ${cursor.y}px; left: ${cursor.x}px;`"
+        class="disable-selection"
+      />
+    </div>
     <vue-resizable
       width="100"
       :height="55"
@@ -160,6 +170,7 @@ export default {
       time: 0,
       spotify: undefined,
       windowObjects: localStorage.getItem("windows"),
+      cursors: {},
     };
   },
   async created() {
@@ -221,25 +232,85 @@ export default {
       this.time = `<span style="color: #6a50e9;">${new Date().toLocaleTimeString()}</span>`;
     }, 100);
 
-    // Connect to websocket
-    let connection = new WebSocket(
+    // Connect to spotify websocket
+    let spotify = new WebSocket(
       // "ws://192.168.10.139:8132/api/spotify/current-track"
       "wss://stianwiu.me/api/spotify/current-track"
     );
-
-    connection.onmessage = (e) => {
+    spotify.onmessage = (e) => {
       this.spotify = JSON.parse(e.data);
     };
-
-    // If connection is closed, try to reconnect
-    connection.onclose = () => {
+    spotify.onclose = () => {
       setTimeout(() => {
-        connection = new WebSocket(
+        spotify = new WebSocket(
           // "ws://192.168.10.139:8132/api/spotify/current-track"
           "wss://stianwiu.me/api/spotify/current-track"
         );
       }, 1000);
     };
+    console.log("test");
+    // Connect to cursor websocket
+    let cursor = new WebSocket(
+      // "ws://192.168.10.139:8132/api/general/cursor"
+      "wss://stianwiu.me/api/general/cursor"
+    );
+
+    cursor.onmessage = async (e) => {
+      // The data received will be json encoded, so decode it
+      let data = JSON.parse(e.data);
+      if (data.type === "disconnected") {
+        delete this.cursors[data.id];
+        return;
+      }
+      const clientLeft = data.x; // example value
+      const clientTop = data.y; // example value
+
+      // Define the dimensions of the client screen and current screen
+      const clientScreenWidth = data.screenWidth; // example value
+      const clientScreenHeight = data.screenHeight; // example value
+      const currentScreenWidth = window.innerWidth; // example value
+      const currentScreenHeight = window.innerHeight; // example value
+
+      // Calculate the scale factor for the width and height
+      const widthScaleFactor = currentScreenWidth / clientScreenWidth;
+      const heightScaleFactor = currentScreenHeight / clientScreenHeight;
+
+      // Calculate the new position for the object based on the scale factor
+      const newLeft = Math.round(clientLeft * widthScaleFactor);
+      const newTop = Math.round(clientTop * heightScaleFactor);
+
+      this.cursors[data.id] = {
+        x: newLeft - 8,
+        y: newTop - 5,
+        lastUpdated: new Date(),
+      };
+    };
+    let reducePings = 0;
+    // Create a trigger for when mouse moves
+    document.addEventListener("mousemove", (e) => {
+      if (reducePings !== 1) {
+        reducePings++;
+        return;
+      } else {
+        reducePings = 0;
+      }
+      cursor.send(
+        // Send the mouse position to the server, but encode it to reduce the size
+        JSON.stringify({
+          x: e.clientX,
+          y: e.clientY,
+          screenWidth: window.innerWidth,
+          screenHeight: window.innerHeight,
+        })
+      );
+
+      // Loop through all cursors and remove the ones that haven't been updated in 7 minutes
+      for (let cursor in this.cursors) {
+        if (new Date() - this.cursors[cursor].lastUpdated > 1000 * 60 * 7) {
+          delete this.cursors[cursor];
+        }
+      }
+    });
   },
   components: {
     TopbarComponent,
@@ -550,6 +621,23 @@ export default {
   100% {
     transform: rotate(360deg);
   }
+}
+
+#cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 27px;
+  height: 27px;
+  z-index: 9999;
+  transition: all 10ms ease-out;
+
+  /* Disable dragging */
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
 }
 
 /* If mobile */
