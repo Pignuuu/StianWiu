@@ -13,8 +13,8 @@ app.use(cors());
 const compression = require('compression');
 app.use(compression());
 
-// const spotify = require('./routes/spotify.js')
-// app.use('/api/spotify', spotify)
+const spotify = require('./routes/spotify.js')
+app.use('/api/spotify', spotify)
 const general = require('./routes/general.js')
 app.use('/api/general', general)
 
