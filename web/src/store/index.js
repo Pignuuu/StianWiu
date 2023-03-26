@@ -6,7 +6,7 @@ export default createStore({
       {
         id: "Description",
         title: 'About me - Notepad.exe',
-        closed: true,
+        closed: false,
         maximized: false,
         desktop: {
           top: 50,
@@ -28,7 +28,7 @@ export default createStore({
       {
         id: "SpotifyStatus",
         title: 'StianWiu - Spotify.exe',
-        closed: true,
+        closed: false,
         maximized: false,
         desktop: {
           top: 380,
@@ -50,7 +50,7 @@ export default createStore({
       {
         id: "ChatWindow",
         title: 'AIM AOL Instant Messenger.exe',
-        closed: false,
+        closed: true,
         maximized: false,
         desktop: {
           top: 178,
