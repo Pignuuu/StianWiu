@@ -124,7 +124,11 @@
       <ChatWindow id="ChatWindow" />
     </vue-resizable>
     <!-- v-for all cursors in this.cursors -->
-    <div v-for="(cursor, index) in this.cursors" :key="index">
+    <div
+      style="top: 0; left: 0"
+      v-for="(cursor, index) in this.cursors"
+      :key="index"
+    >
       <!-- Change positions using cursor.x cursor.y -->
       <img
         src="../assets/icons/cursor.svg"

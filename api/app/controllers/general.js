@@ -17,7 +17,6 @@ module.exports = {
     clients.add(ws);
     const rngID = Math.floor(Math.random() * 1000000 + 1);
     ws.on('message', async (message) => {
-      console.log('message', message);
       clients.forEach((client) => {
         if (client !== ws && client.readyState === WebSocket.OPEN) {
           message = JSON.parse(message);
@@ -79,6 +78,7 @@ module.exports = {
             model: "gpt-3.5-turbo",
             messages: memory,
           }).then((response) => {
+            console.log(response.data.choices[0].message.content)
             // Add AI reply to memory
             memory.push({
               role: "assistant",
