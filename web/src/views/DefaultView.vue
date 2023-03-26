@@ -316,31 +316,31 @@ export default {
       };
     };
     // Create a trigger for when mouse moves
-    // let reducePings = 0;
-    // document.addEventListener("mousemove", (e) => {
-    //   if (reducePings !== 1) {
-    //     reducePings++;
-    //     return;
-    //   } else {
-    //     reducePings = 0;
-    //   }
-    //   cursor.send(
-    //     // Send the mouse position to the server, but encode it to reduce the size
-    //     JSON.stringify({
-    //       x: e.clientX,
-    //       y: e.clientY,
-    //       screenWidth: window.innerWidth,
-    //       screenHeight: window.innerHeight,
-    //     })
-    //   );
+    let reducePings = 0;
+    document.addEventListener("mousemove", (e) => {
+      if (reducePings !== 1) {
+        reducePings++;
+        return;
+      } else {
+        reducePings = 0;
+      }
+      cursor.send(
+        // Send the mouse position to the server, but encode it to reduce the size
+        JSON.stringify({
+          x: e.clientX,
+          y: e.clientY,
+          screenWidth: window.innerWidth,
+          screenHeight: window.innerHeight,
+        })
+      );
 
-    //   // Loop through all cursors and remove the ones that haven't been updated in 7 minutes
-    //   for (let cursor in this.cursors) {
-    //     if (new Date() - this.cursors[cursor].lastUpdated > 1000 * 60 * 7) {
-    //       delete this.cursors[cursor];
-    //     }
-    //   }
-    // });
+      // Loop through all cursors and remove the ones that haven't been updated in 7 minutes
+      for (let cursor in this.cursors) {
+        if (new Date() - this.cursors[cursor].lastUpdated > 1000 * 60 * 7) {
+          delete this.cursors[cursor];
+        }
+      }
+    });
   },
   methods: {
     focusWindow(windowId) {
