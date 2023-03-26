@@ -100,6 +100,29 @@
         </div>
       </div>
     </vue-resizable>
+    <vue-resizable
+      @mousedown="this.focusWindow('ChatWindow')"
+      class="window"
+      id="ChatWindow"
+      dragSelector=".topbar"
+      v-if="!$store.getters.getWindow('ChatWindow').closed"
+      :width="this.windowObjects.ChatWindow.width"
+      :height="this.windowObjects.ChatWindow.height"
+      :min-width="$store.getters.getWindow('ChatWindow').minWidth"
+      :min-height="$store.getters.getWindow('ChatWindow').minHeight"
+      :top="`${this.windowObjects.ChatWindow.top}px`"
+      :left="`${this.windowObjects.ChatWindow.left}px`"
+      :fit-parent="true"
+      @resize:end="windowHandler('ChatWindow', $event)"
+      @drag:end="windowHandler('ChatWindow', $event)"
+    >
+      <TopbarComponent
+        windowId="ChatWindow"
+        :title="$store.getters.getTitle('ChatWindow')"
+        class="topbar"
+      />
+      <ChatWindow id="ChatWindow" />
+    </vue-resizable>
     <!-- v-for all cursors in this.cursors -->
     <div v-for="(cursor, index) in this.cursors" :key="index">
       <!-- Change positions using cursor.x cursor.y -->
@@ -162,8 +185,15 @@
 import VueResizable from "vue-resizable";
 import TopbarComponent from "@/components/TopbarComponent.vue";
 import ProgressbarComponent from "@/components/ProgressbarComponent.vue";
+import ChatWindow from "@/components/ChatWindow.vue";
 export default {
   name: "DefaultView",
+  components: {
+    TopbarComponent,
+    VueResizable,
+    ProgressbarComponent,
+    ChatWindow,
+  },
   data() {
     return {
       codingAge: 0,
@@ -285,37 +315,32 @@ export default {
         lastUpdated: new Date(),
       };
     };
-    let reducePings = 0;
     // Create a trigger for when mouse moves
-    document.addEventListener("mousemove", (e) => {
-      if (reducePings !== 1) {
-        reducePings++;
-        return;
-      } else {
-        reducePings = 0;
-      }
-      cursor.send(
-        // Send the mouse position to the server, but encode it to reduce the size
-        JSON.stringify({
-          x: e.clientX,
-          y: e.clientY,
-          screenWidth: window.innerWidth,
-          screenHeight: window.innerHeight,
-        })
-      );
+    // let reducePings = 0;
+    // document.addEventListener("mousemove", (e) => {
+    //   if (reducePings !== 1) {
+    //     reducePings++;
+    //     return;
+    //   } else {
+    //     reducePings = 0;
+    //   }
+    //   cursor.send(
+    //     // Send the mouse position to the server, but encode it to reduce the size
+    //     JSON.stringify({
+    //       x: e.clientX,
+    //       y: e.clientY,
+    //       screenWidth: window.innerWidth,
+    //       screenHeight: window.innerHeight,
+    //     })
+    //   );
 
-      // Loop through all cursors and remove the ones that haven't been updated in 7 minutes
-      for (let cursor in this.cursors) {
-        if (new Date() - this.cursors[cursor].lastUpdated > 1000 * 60 * 7) {
-          delete this.cursors[cursor];
-        }
-      }
-    });
-  },
-  components: {
-    TopbarComponent,
-    VueResizable,
-    ProgressbarComponent,
+    //   // Loop through all cursors and remove the ones that haven't been updated in 7 minutes
+    //   for (let cursor in this.cursors) {
+    //     if (new Date() - this.cursors[cursor].lastUpdated > 1000 * 60 * 7) {
+    //       delete this.cursors[cursor];
+    //     }
+    //   }
+    // });
   },
   methods: {
     focusWindow(windowId) {
@@ -412,10 +437,6 @@ export default {
 </script>
 
 <style scoped>
-#Description {
-  position: absolute;
-}
-
 #Description .content {
   text-align: start;
   font-size: 20px;
@@ -431,7 +452,7 @@ export default {
   -ms-overflow-style: none;
 }
 
-#SpotifyStatus {
+#desktop > div {
   position: absolute;
 }
 
@@ -621,6 +642,11 @@ export default {
   100% {
     transform: rotate(360deg);
   }
+}
+
+#ChatWindow {
+  width: 100%;
+  height: 100%;
 }
 
 #cursor {
