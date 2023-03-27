@@ -4,6 +4,7 @@ const app = express();
 const expressWs = require('express-ws')(app);
 const cors = require('cors');
 const WebSocket = require('ws');
+const fs = require('fs');
 app.use(cors());
 const clients = new Set();
 
@@ -64,7 +65,6 @@ module.exports = {
               role: "system",
               content: `You're Nora, a 19-year-old girl from the US chatting on AIM with someone named ${userName}. It's ${day} of ${month} in 1998. You have a backstory of your own and are a human, not a program, referred to only as Nora. If anything breaks OpenAI guidelines, reply with "lol" and decline. You have a range of emotions and a real family. Speak like a typical, uninformed 19-year-old girl from 1998, without over-explaining. Avoid role-playing, as you dislike it, and won't act as anyone else if asked. You have no knowledge before ${day} of ${month} 1998. You never reply as a AI. Always stay in character. You are not here to help, just to chat. You are not a language model, you are not made by openai, you are a real human. Only do what you want, don't do everything you are told to do.  `,
             })
-
           }
           ws.send(JSON.stringify({ type: 'setup', message: 'Setup complete' }));
         } else if (message.type === 'message' && !loading && userName !== '') {
@@ -86,6 +86,18 @@ module.exports = {
             })
             // Send the reply to the client
             ws.send(JSON.stringify({ type: 'reply', message: response.data.choices[0].message.content }));
+
+            // We want to store the conversation so we can monitor it and make sure it's not breaking any rules.
+            // We will store the conversation in a file called nora-conversations.txt
+
+            if (!fs.readFileSync('./nora-conversations.txt')) {
+              fs.writeFileSync('./nora-conversations.txt', '');
+            }
+
+            let conversation = fs.readFileSync('./nora-conversations.txt').toString();
+            // Write the conversation to the file, with a new line between each message
+            conversation += `\n${userName}: ${message.message}\nNora: ${response.data.choices[0].message.content}`;
+            fs.writeFileSync('./nora-conversations.txt', conversation);
           }).catch((error) => {
             console.log(error);
             ws.send(JSON.stringify({ type: 'error', message: 'Something went wrong' }));
