@@ -583,6 +583,9 @@ export default {
   flex-direction: column;
   text-align: start;
 }
+#SpotifyStatus {
+  overflow: hidden;
+}
 .spotify-img {
   width: 100px;
 
@@ -651,6 +654,7 @@ export default {
 #ChatWindow {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 #cursor {

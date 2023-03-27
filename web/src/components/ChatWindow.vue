@@ -18,33 +18,22 @@
     </div>
     <div class="input-body">
       <input
-        v-if="!this.loading"
-        type="text"
-        placeholder="Type your message here..."
-        maxlength="200"
-        v-model="message"
-        class="inputField"
-      />
-      <input
-        v-else
         type="text"
         :placeholder="this.loadingText"
         maxlength="200"
         v-model="message"
-        disabled
+        class="inputField"
       />
       <button @click="sendMessage">Send</button>
     </div>
   </div>
   <div v-else>
-    <div class="noName">
-      <h2>Please enter your username</h2>
-    </div>
+    <div class="noName"><p>System: Please enter your username</p></div>
     <div class="input-body">
       <input
         type="text"
         placeholder="Type your name here..."
-        maxlength="200"
+        maxlength="15"
         v-model="message"
       />
       <button @click="sendUsername">Send</button>
@@ -83,11 +72,13 @@ export default {
     // Create a looping loading animation using the . character in loadingText
     setInterval(() => {
       if (this.loading) {
-        if (this.loadingText.length === 17) {
+        if (this.loadingText.length === 17 || this.loadingText.length === 22) {
           this.loadingText = "Nora is typing";
         } else {
           this.loadingText += ".";
         }
+      } else {
+        this.loadingText = "Type your message here";
       }
     }, 500);
   },
@@ -267,8 +258,12 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   background-color: #6a50e9;
+}
+
+.noName > p {
+  padding-left: 10px;
 }
 </style>
