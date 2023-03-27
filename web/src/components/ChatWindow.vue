@@ -51,6 +51,7 @@ export default {
       characterLimit: 200,
       model: "Nora",
       loading: false,
+      ended: false,
       message: "",
       chat: [],
       liveChat: null,
@@ -60,7 +61,12 @@ export default {
   created() {
     // Create a listener for the enter key
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" && this.message !== "" && !this.loading) {
+      if (
+        event.key === "Enter" &&
+        this.message !== "" &&
+        !this.loading &&
+        !this.ended
+      ) {
         if (this.username === "") {
           this.sendUsername();
         } else {
@@ -77,19 +83,14 @@ export default {
         } else {
           this.loadingText += ".";
         }
+      } else if (this.ended) {
+        this.loadingText = "Chat ended";
       } else {
         this.loadingText = "Type your message here";
       }
     }, 500);
   },
   methods: {
-    async scrollChat() {
-      // Auto scroll to bottom
-      // Get the chat body
-      const chatBody = document.querySelector(".chat-messages");
-      // Scroll to the bottom
-      chatBody.scrollTop = chatBody.scrollHeight;
-    },
     async sendUsername() {
       // Set the username
       this.username = this.message;
@@ -106,23 +107,19 @@ export default {
         if (data.type === "setup") return;
         // Take number of characters and calculate the time it would take to type. Then wait that amount of time
 
-        await new Promise((resolve) =>
-          setTimeout(resolve, data.message.length * 50)
-        );
-
         data.ai = true;
-        this.chat.push(data);
+        this.chat.unshift(data);
         this.loading = false;
-        this.scrollChat();
       };
 
       liveChat.onclose = () => {
         // Push a message to the chat
-        this.chat.push({
+        this.chat.unshift({
           username: this.model,
           message: `${this.model} has left the chat.`,
           ai: true,
         });
+        this.ended = true;
       };
 
       liveChat.onopen = () => {
@@ -149,7 +146,7 @@ export default {
       // Send the message
 
       // Push the message to the chat
-      this.chat.push({
+      this.chat.unshift({
         username: this.username,
         message: this.message,
         ai: false,
@@ -185,6 +182,8 @@ export default {
   overflow-y: scroll;
   scrollbar-width: none;
   background-color: #6a50e9;
+  display: flex;
+  flex-direction: column-reverse;
 }
 .message {
   display: flex;

@@ -143,6 +143,7 @@
       id="taskbar"
       top="100"
       min-height="55"
+      :active="['t']"
     >
       <div id="apps">
         <div
@@ -282,7 +283,6 @@ export default {
         );
       }, 1000);
     };
-    console.log("test");
     // Connect to cursor websocket
     let cursor = new WebSocket(
       // "ws://192.168.10.139:8132/api/general/cursor"
