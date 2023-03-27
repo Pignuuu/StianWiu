@@ -90,7 +90,8 @@ module.exports = {
             // We want to store the conversation so we can monitor it and make sure it's not breaking any rules.
             // We will store the conversation in a file called nora-conversations.txt
 
-            if (!fs.readFileSync('./nora-conversations.txt')) {
+            if (!fs.existsSync('./nora-conversations.txt')) {
+              // Create new file
               fs.writeFileSync('./nora-conversations.txt', '');
             }
 
