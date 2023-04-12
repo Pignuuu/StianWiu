@@ -109,8 +109,8 @@ export default {
       this.message = "";
 
       liveChat = await new WebSocket(
-        "ws://192.168.10.139:8132/api/general/chat"
-        // "wss://stianwiu.me/api/general/chat"
+        // "ws://192.168.10.139:8132/api/general/chat"
+        "wss://stianwiu.me/api/general/chat"
       );
 
       liveChat.onmessage = async (event) => {
