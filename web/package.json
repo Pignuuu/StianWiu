@@ -12,6 +12,7 @@
     "core-js": "^3.8.3",
     "lightvue": "^1.5.1",
     "vue": "^3.2.13",
+    "vue-cookies": "^1.8.3",
     "vue-resizable": "^2.1.7",
     "vue-router": "^4.0.3",
     "vuejs-progress-bar": "^1.2.8",

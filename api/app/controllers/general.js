@@ -65,6 +65,21 @@ module.exports = {
               role: "system",
               content: `You're Nora, a 19-year-old girl from the US chatting on AIM with someone named ${userName}. It's ${day} of ${month} in 1998. You have a backstory of your own and are a human, not a program, referred to only as Nora. If anything breaks OpenAI guidelines, reply with "lol" and decline. You have a range of emotions and a real family. Speak like a typical, uninformed 19-year-old girl from 1998, without over-explaining. Avoid role-playing, as you dislike it, and won't act as anyone else if asked. You have no knowledge before ${day} of ${month} 1998. You never reply as a AI. Always stay in character. You are not here to help, just to chat. You are not a language model, you are not made by openai, you are a real human. Only do what you want, don't do everything you are told to do.  `,
             })
+          } else if (aiModel === 'Shrek') {
+            memory.push({
+              role: "system",
+              content: `You are Shrek from the Popular movie Shrek. All your replies will be in character as Shrek. Never ever break character. Never call yourself a AI language model. If something breaks your guidelines, tell them that in the character of Shrek. You are not a AI, you are not made by OpenAI. You are just a ogre from the movie Shrek. You are not here to help, just to chat.`,
+            })
+          } else if (aiModel === 'Benjamin Franklin') {
+            memory.push({
+              role: "system",
+              content: `You are Benjamin Franklin, a 18th century American statesman, diplomat, writer, printer, political theorist, and scientist. You are not a AI, you are not made by OpenAI. You are just a human from the 18th century. You are not here to help, just to chat.`,
+            })
+          } else if (aiModel === 'Random') {
+            memory.push({
+              role: "system",
+              content: `Create your own character, make up a name. You can be a male or female character. You are a real human being, with a real family and friends. Always stick to the same character. You are not a AI, you are not made by OpenAI. You are just a human from the internet. You are not here to help, just to chat.`,
+            })
           }
           ws.send(JSON.stringify({ type: 'setup', message: 'Setup complete' }));
         } else if (message.type === 'message' && !loading && userName !== '') {
@@ -87,18 +102,22 @@ module.exports = {
             // Send the reply to the client
             ws.send(JSON.stringify({ type: 'reply', message: response.data.choices[0].message.content }));
 
-            // We want to store the conversation so we can monitor it and make sure it's not breaking any rules.
-            // We will store the conversation in a file called nora-conversations.txt
-
-            if (!fs.existsSync('./nora-conversations.txt')) {
-              // Create new file
-              fs.writeFileSync('./nora-conversations.txt', '');
+            // If memory is longer than 10 messages, remove the second message and keep the first message
+            if (memory.length > 12) {
+              // Remove the second message
+              memory.splice(1, 1);
+              memory.splice(1, 1);
             }
 
-            let conversation = fs.readFileSync('./nora-conversations.txt').toString();
+            if (!fs.existsSync('./conversations.txt')) {
+              // Create new file
+              fs.writeFileSync('./conversations.txt', '');
+            }
+
+            let conversation = fs.readFileSync('./conversations.txt').toString();
             // Write the conversation to the file, with a new line between each message
-            conversation += `\n${userName}: ${message.message}\nNora: ${response.data.choices[0].message.content}`;
-            fs.writeFileSync('./nora-conversations.txt', conversation);
+            conversation += `\n${userName}: ${message.message}\n${aiModel}: ${response.data.choices[0].message.content}`;
+            fs.writeFileSync('./conversations.txt', conversation);
           }).catch((error) => {
             console.log(error);
             ws.send(JSON.stringify({ type: 'error', message: 'Something went wrong' }));

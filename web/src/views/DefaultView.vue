@@ -239,6 +239,10 @@ export default {
       }
     }
 
+    // Create a test cookie using npm module vue-cookies
+
+    this.$cookies.set("test");
+
     this.windowObjects = JSON.parse(localStorage.getItem("windows"));
 
     // Set the time
@@ -259,7 +263,6 @@ export default {
       hour %= 24;
       day %= 30;
       month %= 12;
-
       // Set the coding age
       this.codingAge = `<span style="color: #e5a4f4;">${year}</span> years,<span style="color: #e5a4f4;">${month}</span> months,<span style="color: #e5a4f4;">${day}</span> days,<span style="color: #e5a4f4;">${hour}</span> hours,<span style="color: #e5a4f4;">${minute}</span> minutes, <span style="color: #e5a4f4;">${second}</span> seconds`;
 
@@ -345,6 +348,11 @@ export default {
         }
       }
     });
+
+    // Ping the server every 5 minutes to keep the connection alive
+    setInterval(() => {
+      cursor.send("ping");
+    }, 1000 * 10);
   },
   methods: {
     focusWindow(windowId) {
@@ -384,7 +392,6 @@ export default {
           this.previewPlaying = false;
         };
       }
-
       this.previewPlaying = !this.previewPlaying;
     },
     windowHandler(id, event) {

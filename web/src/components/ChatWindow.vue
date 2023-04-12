@@ -28,7 +28,18 @@
     </div>
   </div>
   <div v-else>
-    <div class="noName"><p>System: Please enter your username</p></div>
+    <div class="noName">
+      <p>System: Please enter your username</p>
+      <p>System: Start chatting with {{ this.model }}</p>
+      <div class="selectModel">
+        <button @click="selectModel('Nora')">Nora</button>
+        <button @click="selectModel('Shrek')">Shrek</button>
+        <button @click="selectModel('Benjamin Franklin')">
+          Benjamin Franklin
+        </button>
+        <button @click="selectModel('Random')">Random Person</button>
+      </div>
+    </div>
     <div class="input-body">
       <input
         type="text"
@@ -79,7 +90,7 @@ export default {
     setInterval(() => {
       if (this.loading) {
         if (this.loadingText.length === 17 || this.loadingText.length === 22) {
-          this.loadingText = "Nora is typing";
+          this.loadingText = this.model + " is typing";
         } else {
           this.loadingText += ".";
         }
@@ -98,8 +109,8 @@ export default {
       this.message = "";
 
       liveChat = await new WebSocket(
-        // "ws://192.168.10.139:8132/api/general/chat"
-        "wss://stianwiu.me/api/general/chat"
+        "ws://192.168.10.139:8132/api/general/chat"
+        // "wss://stianwiu.me/api/general/chat"
       );
 
       liveChat.onmessage = async (event) => {
@@ -160,6 +171,9 @@ export default {
       );
       this.loading = true;
       this.message = "";
+    },
+    selectModel(model) {
+      this.model = model;
     },
   },
 };
@@ -226,6 +240,12 @@ export default {
   background-color: #6a50e9;
   border: 3px solid #e5a4f4;
   color: white;
+  caret-color: #e5a4f4;
+  /* Change the temporary text color */
+  -webkit-text-fill-color: white;
+  /* Change the placeholder text color */
+  -webkit-opacity: 1;
+
   font-weight: bold;
   /* Fix border that appears when clicking on input */
   outline: transparent;
@@ -264,5 +284,29 @@ export default {
 
 .noName > p {
   padding-left: 10px;
+}
+
+.selectModel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 200px;
+  width: 100%;
+}
+
+.selectModel > button {
+  background-color: #6a50e9;
+  color: white;
+  border: 3px solid #e5a4f4;
+  font-size: 1.5rem;
+  margin: 0.5rem 0rem;
+
+  cursor: pointer;
+}
+
+.selectModel > button:active {
+  background-color: #e5a4f4;
+  color: #6a50e9;
 }
 </style>
