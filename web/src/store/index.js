@@ -69,6 +69,28 @@ export default createStore({
           minHeight: 450,
         },
       },
+      {
+        id: "SnakeGame",
+        title: 'Snake.exe',
+        closed: true,
+        maximized: false,
+        desktop: {
+          top: 148,
+          left: document.documentElement.clientWidth / 2 - 225,
+          width: "405px",
+          height: "440px",
+          minWidth: 405,
+          minHeight: 440,
+        },
+        mobile: {
+          top: 65,
+          left: document.documentElement.clientWidth / 2 - 175,
+          width: "350px",
+          height: "500px",
+          minWidth: 300,
+          minHeight: 300,
+        },
+      },
     ],
   },
   getters: {

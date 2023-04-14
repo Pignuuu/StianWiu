@@ -179,7 +179,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .chat-window {
   height: 100%;
   width: 100%;
@@ -208,16 +208,19 @@ export default {
   width: 95%;
 }
 
-.ai > .name {
-  color: #e5a4f4;
-  font-weight: bold;
-  margin-right: 0.5rem;
+.ai {
+  .name {
+    color: #e5a4f4;
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
 }
-
-.user > .name {
-  color: #f5f5f5;
-  font-weight: bold;
-  margin-right: 0.5rem;
+.user {
+  .name {
+    color: #f5f5f5;
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
 }
 
 .input-body {
@@ -229,47 +232,47 @@ export default {
   justify-content: space-between;
   background-color: #6a50e9;
   width: 100%;
-}
 
-.input-body > input {
-  width: 100%;
-  height: 100%;
-  padding: 10px;
-  margin: 10px 20px;
-  border: none;
-  background-color: #6a50e9;
-  border: 3px solid #e5a4f4;
-  color: white;
-  caret-color: #e5a4f4;
-  /* Change the temporary text color */
-  -webkit-text-fill-color: white;
-  /* Change the placeholder text color */
-  -webkit-opacity: 1;
+  input {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    margin: 10px 20px;
+    border: none;
+    background-color: #6a50e9;
+    border: 3px solid #e5a4f4;
+    color: white;
+    caret-color: #e5a4f4;
+    /* Change the temporary text color */
+    -webkit-text-fill-color: white;
+    /* Change the placeholder text color */
+    -webkit-opacity: 1;
 
-  font-weight: bold;
-  /* Fix border that appears when clicking on input */
-  outline: transparent;
-}
+    font-weight: bold;
+    /* Fix border that appears when clicking on input */
+    outline: transparent;
+  }
 
-.input-body > button {
-  background-color: #6a50e9;
-  color: white;
-  border: 3px solid #e5a4f4;
-  font-size: 1.5rem;
-  margin: 0 0.5rem;
-}
+  button {
+    background-color: #6a50e9;
+    color: white;
+    border: 3px solid #e5a4f4;
+    font-size: 1.5rem;
+    margin: 0 0.5rem;
+  }
 
-.input-body > button:hover {
-  background-color: #e5a4f4;
-  color: #6a50e9;
-  cursor: pointer;
-}
+  button:hover {
+    background-color: #e5a4f4;
+    color: #6a50e9;
+    cursor: pointer;
+  }
 
-.input-body > button:active {
-  background-color: #6a50e9;
-  color: white;
-  border: 3px solid #e5a4f4;
-  cursor: pointer;
+  button:active {
+    background-color: #6a50e9;
+    color: white;
+    border: 3px solid #e5a4f4;
+    cursor: pointer;
+  }
 }
 
 .noName {
@@ -280,10 +283,10 @@ export default {
   justify-content: flex-start;
   align-items: flex-start;
   background-color: #6a50e9;
-}
 
-.noName > p {
-  padding-left: 10px;
+  p {
+    padding-left: 10px;
+  }
 }
 
 .selectModel {
@@ -293,20 +296,23 @@ export default {
   align-items: center;
   height: 200px;
   width: 100%;
-}
 
-.selectModel > button {
-  background-color: #6a50e9;
-  color: white;
-  border: 3px solid #e5a4f4;
-  font-size: 1.5rem;
-  margin: 0.5rem 0rem;
+  button {
+    background-color: #6a50e9;
+    color: white;
+    border: 3px solid #e5a4f4;
+    font-size: 1.5rem;
+    margin: 0.5rem 0rem;
 
-  cursor: pointer;
-}
-
-.selectModel > button:active {
-  background-color: #e5a4f4;
-  color: #6a50e9;
+    cursor: pointer;
+  }
+  .selectModel {
+    button {
+      :active {
+        background-color: #e5a4f4;
+        color: #6a50e9;
+      }
+    }
+  }
 }
 </style>

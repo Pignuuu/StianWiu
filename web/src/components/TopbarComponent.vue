@@ -27,7 +27,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #title {
   margin-left: 10px;
   color: #6a50e9;
@@ -47,29 +47,31 @@ export default {
   flex-wrap: nowrap;
 
   cursor: pointer;
-}
 
-#bar button {
-  background-color: #e5a4f4;
-  border: 2px solid #a06bcc;
+  button {
+    background-color: #e5a4f4;
+    border: 2px solid #a06bcc;
 
-  height: 25px;
-  width: 25px;
-  padding: 0;
+    height: 25px;
+    width: 25px;
+    padding: 0;
 
-  color: white;
-  text-align: center;
-  margin: 4px 2px;
-  cursor: pointer;
-}
+    color: white;
+    text-align: center;
+    margin: 4px 2px;
+    cursor: pointer;
 
-#bar button > img {
-  height: 100%;
-  width: 100%;
-}
+    img {
+      height: 100%;
+      width: 100%;
+    }
+  }
 
-#bar button:hover {
-  background-color: #db9ee9;
+  button {
+    :hover {
+      background-color: #db9ee9;
+    }
+  }
 }
 
 #buttons {

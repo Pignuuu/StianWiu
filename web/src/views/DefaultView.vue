@@ -123,6 +123,29 @@
       />
       <ChatWindow id="ChatWindow" />
     </vue-resizable>
+    <vue-resizable
+      @mousedown="this.focusWindow('SnakeGame')"
+      class="window"
+      id="SnakeGame"
+      dragSelector=".topbar"
+      v-if="!$store.getters.getWindow('SnakeGame').closed"
+      :width="this.windowObjects.SnakeGame.width"
+      :height="this.windowObjects.SnakeGame.height"
+      :min-width="$store.getters.getWindow('SnakeGame').minWidth"
+      :min-height="$store.getters.getWindow('SnakeGame').minHeight"
+      :top="`${this.windowObjects.SnakeGame.top}px`"
+      :left="`${this.windowObjects.SnakeGame.left}px`"
+      :fit-parent="true"
+      @resize:end="windowHandler('SnakeGame', $event)"
+      @drag:end="windowHandler('SnakeGame', $event)"
+    >
+      <TopbarComponent
+        windowId="SnakeGame"
+        :title="$store.getters.getTitle('SnakeGame')"
+        class="topbar"
+      />
+      <SnakeGame id="SnakeGame" />
+    </vue-resizable>
     <!-- v-for all cursors in this.cursors -->
     <div
       style="top: 0; left: 0"
@@ -191,6 +214,7 @@ import VueResizable from "vue-resizable";
 import TopbarComponent from "@/components/TopbarComponent.vue";
 import ProgressbarComponent from "@/components/ProgressbarComponent.vue";
 import ChatWindow from "@/components/ChatWindow.vue";
+import SnakeGame from "@/components/SnakeGame.vue";
 export default {
   name: "DefaultView",
   components: {
@@ -198,6 +222,7 @@ export default {
     VueResizable,
     ProgressbarComponent,
     ChatWindow,
+    SnakeGame,
   },
   data() {
     return {
@@ -209,6 +234,12 @@ export default {
     };
   },
   async created() {
+    const currentVersion = localStorage.getItem("version");
+    if (currentVersion !== 0.1) {
+      localStorage.clear();
+      localStorage.setItem("version", 0.1);
+    }
+
     // Create window positions in local storage if they don't exist.
     if (localStorage.getItem("windows") === null) {
       for (let window in this.$store.state.windows) {
@@ -447,24 +478,25 @@ export default {
 };
 </script>
 
-<style scoped>
-#Description .content {
-  text-align: start;
-  font-size: 20px;
-  padding: 10px;
+<style scoped lang="scss">
+$background-color: #6a50e9;
+$accent-color: #e5a4f4;
 
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
+#Description {
+  .content {
+    text-align: start;
+    font-size: 20px;
+    padding: 10px;
 
-  overflow: auto;
-  /* Hide scroll bars but still work */
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 
-#desktop > div {
-  position: absolute;
+    overflow: auto;
+    /* Hide scroll bars but still work */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
 }
 
 #desktop {
@@ -475,6 +507,10 @@ export default {
 
   width: 100%;
   height: 100%;
+
+  > div {
+    position: absolute;
+  }
 }
 
 .resizable {
@@ -486,7 +522,7 @@ export default {
   width: 100%;
   height: 100%;
 
-  background-color: #6a50e9;
+  background-color: $background-color;
 
   /* Remove selection outline */
   outline: none;
@@ -494,9 +530,9 @@ export default {
 
 .window {
   /* Border on left right and bottom */
-  border-left: 3px solid #e5a4f4;
-  border-right: 3px solid #e5a4f4;
-  border-bottom: 3px solid #e5a4f4;
+  border-left: 3px solid $accent-color;
+  border-right: 3px solid $accent-color;
+  border-bottom: 3px solid $accent-color;
 
   display: flex;
   align-items: center;
@@ -513,7 +549,7 @@ export default {
   height: 55px;
   position: absolute;
   bottom: 0;
-  background-color: #e5a4f4;
+  background-color: $accent-color;
 
   display: flex;
   align-items: flex-start;
@@ -529,10 +565,10 @@ export default {
   flex-wrap: wrap;
   /* height: 100%; */
   width: 100%;
-}
 
-#apps > div {
-  margin-bottom: 5px;
+  > div {
+    margin-bottom: 5px;
+  }
 }
 
 .taskbar-item,
@@ -540,22 +576,21 @@ export default {
   width: 45px;
   height: 45px;
   margin: 0 5px;
-  background-color: #6a50e9;
+  background-color: $background-color;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-}
 
-.taskbar-item .icon,
-.taskbar-item-open .icon {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
+  .icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 
-.taskbar-item:hover {
-  background-color: #5d46cf;
+  :hover {
+    background-color: #5d46cf;
+  }
 }
 
 .taskbar-item-open {
@@ -566,17 +601,17 @@ export default {
   width: 200px;
   height: 55px;
   margin: 0 5px;
-  color: #6a50e9;
+  color: $background-color;
   display: flex;
   align-items: center;
   justify-content: center;
-}
 
-#extra .icon {
-  width: 45px;
-  height: 45px;
-  margin: 0 5px;
-  object-fit: contain;
+  .icon {
+    width: 45px;
+    height: 45px;
+    margin: 0 5px;
+    object-fit: contain;
+  }
 }
 
 /* Spotify stuff */
@@ -597,7 +632,7 @@ export default {
   width: 100px;
 
   margin: 10px;
-  border: 3px solid #e5a4f4;
+  border: 3px solid $accent-color;
 }
 
 .spotify-info {
@@ -608,18 +643,18 @@ export default {
   justify-content: center;
   flex-direction: row;
   text-align: start;
-}
 
-.spotify-info .stats {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
-  text-align: start;
+  .stats {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    text-align: start;
 
-  font-size: 25px;
+    font-size: 25px;
+  }
 }
 
 #spotify-progress {
@@ -659,6 +694,12 @@ export default {
 }
 
 #ChatWindow {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#SnakeGame {
   width: 100%;
   height: 100%;
   overflow: hidden;
