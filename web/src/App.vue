@@ -1,61 +1,30 @@
 <template>
-  <router-view />
+  <nav>
+    <router-link to="/">Home</router-link> |
+    <router-link to="/about">About</router-link>
+  </nav>
+  <router-view/>
 </template>
 
-<style>
-@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
-
-html,
-body,
+<style lang="scss">
 #app {
-  margin: 0;
-  padding: 0;
-
-  height: 100%;
-
-  background-color: #6a50e9;
-  color: white;
-
-  font-family: "Source Code Pro", monospace;
-
-  /* Add more space between characters */
-  letter-spacing: 0.1em;
-
-  font-size: 13px;
-  font-weight: 200;
-
-  overflow: hidden;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
 }
 
-* {
-  text-shadow: 0 0px 20px #9900ffea;
-}
+nav {
+  padding: 30px;
 
-#app {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+  a {
+    font-weight: bold;
+    color: #2c3e50;
 
-.retro {
-  font-family: "VT323", monospace;
-}
-/* * {
-  border: 1px solid red;
-} */
-
-/* Change colors of selected text */
-::selection {
-  background-color: #e5a4f4;
-  color: white;
-}
-
-.disable-selection {
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
 }
 </style>
